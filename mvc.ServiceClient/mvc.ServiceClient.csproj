@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\mvc.BusinessLogic\mvc.BusinessLogic.csproj" />
+    <ProjectReference Include="..\mvc.Entities\mvc.Entities.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,24 @@
+﻿@using System.Collections.ObjectModel
+@model ObservableCollection<mvc.Entities.ProductoEntites.Producto>
+
+<h2>Lista de Productos</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.Id</td>
+                <td>@p.Nombre</td>
+                <td>@p.Precio.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
