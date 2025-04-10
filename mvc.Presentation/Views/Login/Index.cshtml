@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>Iniciar sesión</h2>
+
+<!-- Mostrar el mensaje de error si las credenciales son incorrectas -->
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+<form method="post" action="/Login/Login">
+    <div class="form-group">
+        <label for="gmail">Correo electrónico</label>
+        <input type="email" id="gmail" name="gmail" class="form-control" required placeholder="Ingrese su correo electrónico" />
+    </div>
+    <div class="form-group">
+        <label for="contrasenia">Contraseña</label>
+        <input type="password" id="contrasenia" name="contrasenia" class="form-control" required placeholder="Ingrese su contraseña" />
+    </div>
+    <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+</form>
+
+<!-- Opcional: enlace para redirigir a la página de registro -->
+<p class="mt-3">
+    ¿No tienes una cuenta? <a href="/Register">Regístrate aquí</a>
+</p>

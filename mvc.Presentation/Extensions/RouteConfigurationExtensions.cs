@@ -4,8 +4,8 @@
     {
         public static void ConfigureRoutes(this WebApplication app) {
             app.MapControllerRoute(
-         name: "Producto",
-         pattern: "{controller=Producto}/{action=Index}");
+         name: "default",
+         pattern: "{controller=Login}/{action=Index}");
         }
     }
 }

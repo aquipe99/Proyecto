@@ -10,6 +10,6 @@ namespace mvc.DataAccess.DAProducto
 {
     public  interface IProductoRepository
     {
-        ObservableCollection<Producto> ObtenerTodos();
+       ObservableCollection<Producto> ObtenerTodos();
     }
 }

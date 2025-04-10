@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using mvc.ServiceClient.SCProducto;
 
 namespace mvc.Presentation.Controllers
 {
+    [Authorize]
     public class ProductoController : Controller
     {
         private readonly IProductoClient _client;
