@@ -1,0 +1,10 @@
+[
+  {
+    "inputFile": "wwwroot/scss/site.scss",
+    "outputFile": "wwwroot/css/site.min.css",
+    "minify": {
+      "enabled": true,
+      "renameLocals": false
+    }
+  }
+]

@@ -1,0 +1,268 @@
+﻿// 1) Importa tu fuente
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&display=swap');
+
+
+// 2. Define tus tokens personalizados (sin sobrescribir los de Bootstrap)
+$eds-font-family: 'Nunito Sans', sans-serif;
+$eds-font-weight-semibold: 600;
+$eds-font-weight-bold: 700;
+
+//color
+$eds-color-gray-950: #181821;
+// Tamaños y alturas
+$eds-display: ( 
+ "01-semibold": (size: 4.5rem, line-height: 4.75rem, weight: $eds-font-weight-semibold,color: $eds-color-gray-950)
+,"01-bold": (size: 4.5rem, line-height: 4.75rem, weight: $eds-font-weight-bold,color: $eds-color-gray-950)
+,"02-semibold": (size: 3.75rem, line-height: 4rem, weight: $eds-font-weight-semibold,color: $eds-color-gray-950)
+,"02-bold": (size: 3.75rem, line-height: 4rem, weight: $eds-font-weight-bold,color: $eds-color-gray-950) );
+
+@mixin generate-display($map) {
+    @each $name, $values in $map {
+        .display-#{$name} {
+            font-family: $eds-font-family;
+            font-size: map-get($values, size);
+            line-height: map-get($values, line-height);
+            font-weight: map-get($values, weight);
+            color: map-get($values, color);
+        }
+    }
+}
+
+$eds-headings: ( 
+ "01-semibold": ( size: 2.875rem,line-height: 3.125rem,weight: 600, color: $eds-color-gray-950 )
+,"01-bold": ( size: 2.25rem,line-height: 2.5rem,weight: 700, color: $eds-color-gray-950 )
+,"02-semibold": ( size: 2.25rem, line-height: 2.5rem, weight: 600, color: $eds-color-gray-950 )
+,"02-bold": ( size: 2.25rem, line-height: 2.5rem, weight: 700, color: $eds-color-gray-950 )
+,"03-semibold": ( size: 1.875rem,line-height: 2.125rem,weight: 600, color: $eds-color-gray-950 )
+,"03-bold": ( size: 1.875rem, line-height: 2.125rem, weight: 700, color: $eds-color-gray-950 )
+,"04-semibold": ( size: 1.625rem,line-height: 1.875rem,weight: 600, color: $eds-color-gray-950 )
+,"04-bold": ( size: 1.625rem, line-height: 1.875rem, weight: 700, color: $eds-color-gray-950 )
+,"05-semibold": ( size: 1.25rem, line-height: 1.5rem, weight: 600, color: $eds-color-gray-950 )
+,"05-bold": ( size: 1.25rem, line-height: 1.5rem, weight: 700, color: $eds-color-gray-950 )
+,"06-semibold": ( size: 1rem,line-height: 1.25rem,weight: 600, color: $eds-color-gray-950 )
+,"06-bold": ( size: 1rem, line-height: 1.25rem, weight: 700, color: $eds-color-gray-950 ) );
+
+@mixin generate-headings($map) {
+    @each $name, $values in $map {
+        .heading-#{$name} {
+            font-family: $eds-font-family;
+            font-size: map-get($values, size);
+            line-height: map-get($values, line-height);
+            font-weight: map-get($values, weight);
+            color: map-get($values, color);
+        }
+    }
+}
+$eds-body: (
+// BODY 01
+ "01-regular": ( size: 1rem,line-height: 1.25rem,weight: 400, underline: false )
+,"01-semibold": ( size: 1rem, line-height: 1.25rem, weight: 600, underline: false )
+,"01-regular-underline": ( size: 1rem, line-height: 1.25rem, weight: 600, underline: true )
+,"02-regular": ( size: 0.875rem,line-height: 1.125rem,weight: 400, underline: false )
+,"02-semibold": ( size: 0.875rem, line-height: 1.125rem, weight: 600, underline: false )
+,"02-regular-underline": ( size: 0.875rem, line-height: 1.125rem, weight: 400, underline: true ) );
+
+@mixin generate-body($map) {
+    @each $name, $values in $map {
+        .body-#{$name} {
+            font-family: $eds-font-family;
+            font-size: map-get($values, size);
+            line-height: map-get($values, line-height);
+            font-weight: map-get($values, weight);
+            color: $eds-color-gray-950;
+
+            @if map-get($values, underline) == true {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+$eds-caption: ( 
+ "regular": ( size: 0.75rem, line-height: 1rem, weight: 400, underline: false, uppercase: false )
+,"semibold": ( size: 0.75rem, line-height: 1rem, weight: 600, underline: false, uppercase: false )
+,"regular-uppercase": ( size: 0.75rem, line-height: 1rem, weight: 400, underline: false, uppercase: true ) );
+
+@mixin generate-caption($map) {
+    @each $name, $values in $map {
+        .caption-#{$name} {
+            font-family: $eds-font-family;
+            font-size: map-get($values, size);
+            line-height: map-get($values, line-height);
+            font-weight: map-get($values, weight);
+            color: $eds-color-gray-950;
+
+            @if map-get($values, underline) == true {
+                text-decoration: underline;
+            }
+
+            @if map-get($values, uppercase) == true {
+                text-transform: uppercase;
+            }
+        }
+    }
+}
+
+/* Primary */
+$eds-color-primary-blue-50: #EEF8FF;
+$eds-color-primary-blue-100: #D9EEFF;
+$eds-color-primary-blue-200: #BCE2FF;
+$eds-color-primary-blue-300: #8ED0FF;
+$eds-color-primary-blue-400: #59B5FF;
+$eds-color-primary-blue-500: #2990FF;
+$eds-color-primary-blue-600: #1B75F5;
+$eds-color-primary-blue-700: #145FE1;
+$eds-color-primary-blue-800: #174CB6;
+$eds-color-primary-blue-900: #19438F;
+$eds-color-primary-blue-950: #142A57;
+
+$eds-color-primary-blue-gradient-default: linear-gradient(93deg, $eds-color-primary-blue-400 0%, $eds-color-primary-blue-600 100%);
+$eds-color-primary-blue-gradient-hover: linear-gradient(93deg, $eds-color-primary-blue-500 0%, $eds-color-primary-blue-700 100%);
+$eds-color-primary-blue-gradient-active: linear-gradient(93deg, $eds-color-primary-blue-600 0%, $eds-color-primary-blue-800 100%);
+$eds-color-primary-blue-gradient-disabled: linear-gradient(93deg, $eds-color-primary-blue-100 0%, $eds-color-primary-blue-300 100%);
+
+/* Grayscale */
+
+$eds-color-gray-400-opacity-100: #9d9da114;
+$eds-color-gray-400-opacity-300: #9d9da14d;
+$eds-color-gray-400-opacity-500: #9d9da199;
+
+$eds-color-gray-50: #F6F6F9;
+$eds-color-gray-100: #ECECF2;
+$eds-color-gray-200: #D5D6E2;
+$eds-color-gray-300: #B0B2C9;
+$eds-color-gray-400: #8588AB;
+$eds-color-gray-500: #666A91;
+$eds-color-gray-600: #515478;
+$eds-color-gray-700: #424462;
+$eds-color-gray-800: #3A3C52;
+$eds-color-gray-900: #333447;
+$eds-color-gray-950: #181821;
+
+/* Success */
+$eds-color-success-50-opacity-100: #00eca514;
+$eds-color-success-50: #94ffdf;
+$eds-color-success-300: #1affba;
+$eds-color-success-500: #00eca5;
+$eds-color-success-700: #00b880;
+$eds-color-success-900: #006b4b;
+
+/* Warning */
+$eds-color-warning-50: #ffeeb3;
+$eds-color-warning-300: #ffda57;
+$eds-color-warning-500: #ffca10;
+$eds-color-warning-700: #dbab00;
+$eds-color-warning-900: #997700;
+
+/* Error */
+$eds-color-error-500-opacity-100: #ed003914;
+$eds-color-error-50: #ffb8c9;
+$eds-color-error-300: #ff527b;
+$eds-color-error-500: #ed0039;
+$eds-color-error-700: #b8002c;
+$eds-color-error-900: #660019;
+
+/* Shades */
+$eds-color-white-50: #ffffff;
+$eds-color-black-300: #000000;
+
+/*radius*/
+$eds-radius-sm: 0.75rem;  /* 12px */
+$eds-radius-md: 0.875rem; /* 14px */
+/* Spaces */
+$eds-space-xxs: 0.25rem;    /* 4px */
+$eds-space-xs:  0.5rem;     /* 8px */
+$eds-space-sm:  0.75rem;    /* 12px */
+$eds-space-md:  1rem;       /* 16px */
+$eds-space-lg:  1.5rem;     /* 24px */
+$eds-space-xl:  2.25rem;    /* 36px */
+$eds-space-xxl: 2.5rem;     /* 40px */
+$eds-space-xxl-2: 3rem;     /* 48px */
+$eds-space-xxl-3: 5rem;     /* 80px */
+$eds-space-xxl-4: 7.5rem;
+
+$custom-spacers: ( 0: 0, 1: .25rem, 2: .5rem, 3: 1rem, 4: 1.5rem, 5: 3rem, 6: 2rem, 7: 2.5rem, 8: 3.5rem, 9: 4rem, 10: 4.5rem, 11: 5rem, );
+
+$utilities: () !default;
+
+$utilities: map-merge( $utilities, ( "padding-x": ( responsive: true, property: padding-right padding-left, class: px, values: $custom-spacers, ) ) );
+$utilities: map-merge( $utilities, ( "padding-y": ( responsive: true, property: padding-top padding-bottom, class: py, values: $custom-spacers, ) ) );
+$utilities: map-merge( $utilities, ( "padding-end": ( responsive: true, property: padding-right, class: pe, values: $custom-spacers, ) ) );
+$utilities: map-merge( $utilities, ( "padding-top": ( responsive: true, property: padding-top, class: pt, values: $custom-spacers, ) ) );
+$utilities: map-merge($utilities, ( "padding-bottom": ( responsive: true, property: padding-bottom, class: pb, values: $custom-spacers, ) ));
+
+.btn-primary-01 {
+    display: flex;
+    height: 40px;
+    padding: $eds-space-md;
+    justify-content: center;
+    align-items: center;
+    gap: $eds-space-xs;
+    align-self: stretch;
+    border-radius: $eds-radius-sm;
+    background: $eds-color-primary-blue-gradient-default;
+    color: white !important;
+    border: none;
+
+    &:hover {
+        background: $eds-color-primary-blue-gradient-hover;
+    }
+
+    &:active {
+        background: $eds-color-primary-blue-gradient-active;
+    }
+}
+.body-login {
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+    }
+    // Contenedor general
+    .login-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: url('/images/cancha-futbol.jpg') center center / cover no-repeat;
+    }
+    // Caja del formulario
+    .login-box {
+        width: 100%;
+        max-width: 360px;
+        padding: 2rem;
+        border-radius: 1.5rem;
+    }
+    // Imagen del logo
+    .logo-img {
+        max-width: 60px;
+    }
+    // Responsive para móviles
+    @media (max-width: 576px) {
+        .login-box {
+            padding: 1rem !important;
+            border-radius: 1rem !important;
+            margin: 0 1rem;
+        }
+
+        .logo-img {
+            max-width: 50px;
+        }
+
+        .login-box h4 {
+            font-size: 1.25rem;
+        }
+    }
+}
+    
+
+    @import '../lib/bootstrap/scss/bootstrap';
+
+    @include generate-display($eds-display);
+    @include generate-body($eds-body);
+    @include generate-caption($eds-caption);
+    @include generate-headings($eds-headings);
+
