@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using mvc.Entities.ViewModels;
 using mvc.ServiceClient.SCUsuario;
 using System.Security.Claims;
 
@@ -16,21 +17,25 @@ namespace mvc.Presentation.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(new LoginViewModel());
         }
         [HttpPost]
-        public IActionResult Login(string gmail,string contrasenia) {
+        public IActionResult Login(LoginViewModel model) {
 
-            if (_usuarioClient.ValidarLogin(gmail, contrasenia)) {
+            if (!ModelState.IsValid)
+            {
+                return View("Index", model);
+            }
+            if (_usuarioClient.ValidarLogin(model.correo,model.contrasenia)) {
                 var claims = new List<Claim> {
-                    new Claim(ClaimTypes.Name,gmail)
+                    new Claim(ClaimTypes.Name,model.correo)
                 };
                 var identity = new ClaimsIdentity(claims, "CookieAuth");
                 var principal = new ClaimsPrincipal(identity);
                 HttpContext.SignInAsync("CookieAuth", principal).Wait();
                 return RedirectToAction("Index", "Producto");
             }
-            ViewBag.Error = "Credenciales incorrectas.";
+            ModelState.AddModelError(string.Empty, "Credenciales incorrectas.");
             return View("Index");
         }
         public IActionResult Logout() {

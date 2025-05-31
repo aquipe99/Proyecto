@@ -1,5 +1,5 @@
 ﻿using mvc.DataAccess.DAProducto;
-using mvc.Entities.ProductoEntites;
+using mvc.Entities.BaseEntities.ProductoEntites;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

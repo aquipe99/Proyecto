@@ -1,5 +1,4 @@
-﻿using mvc.Entities.ProductoEntites;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -10,6 +9,7 @@ using Microsoft.IdentityModel.Protocols;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using mvc.DataAccess.Servicios;
+using mvc.Entities.BaseEntities.ProductoEntites;
 
 namespace mvc.DataAccess.DAProducto
 {

@@ -1,0 +1,74 @@
+public enum LoginResultado
+{
+    Exitoso,
+    UsuarioNoExiste,
+    ClaveIncorrecta,
+    UsuarioDesactivado
+}
+
+public class LoginService
+{
+    public LoginResultado ValidarUsuario(string email, string password)
+    {
+        var usuario = usuarioRepository.ObtenerPorEmail(email);
+        if (usuario == null)
+            return LoginResultado.UsuarioNoExiste;
+
+        if (!usuario.Clave.Equals(password))
+            return LoginResultado.ClaveIncorrecta;
+
+        if (!usuario.EstaActivo)
+            return LoginResultado.UsuarioDesactivado;
+
+        return LoginResultado.Exitoso;
+    }
+}
+
+
+
+
+[HttpPost]
+public IActionResult Login(LoginViewModel model)
+{
+    if (!ModelState.IsValid)
+        return View(model);
+
+    var resultado = _loginService.ValidarUsuario(model.Email, model.Password);
+
+    switch (resultado)
+    {
+        case LoginResultado.UsuarioNoExiste:
+        case LoginResultado.ClaveIncorrecta:
+            ModelState.AddModelError(string.Empty, "Credenciales incorrectas");
+            return View(model);
+
+        case LoginResultado.UsuarioDesactivado:
+            ModelState.AddModelError(string.Empty, "Su cuenta ha sido desactivada. Contacte al administrador.");
+            return View(model);
+
+        case LoginResultado.Exitoso:
+            // Redirige a otra página o crea sesión
+            return RedirectToAction("Index", "Home");
+    }
+
+    return View(model); // Fallback
+}
+
+
+public int ValidarLogin(string email, string password)
+{
+    using var connection = new SqlConnection(_connectionString);
+    using var command = new SqlCommand("sp_ValidarLogin", connection)
+    {
+        CommandType = CommandType.StoredProcedure
+    };
+
+    command.Parameters.AddWithValue("@Email", email);
+    command.Parameters.AddWithValue("@Password", password); // *Debe estar hasheado*
+
+    connection.Open();
+    var result = command.ExecuteScalar();
+
+    return Convert.ToInt32(result);
+}
+

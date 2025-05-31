@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace mvc.Entities.UsuarioEntities
+namespace mvc.Entities.BaseEntities.UsuarioEntities
 {
     public partial class Usuario
     {

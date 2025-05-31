@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace mvc.Entities.ProductoEntites
+namespace mvc.Entities.BaseEntities.ProductoEntites
 {
     public partial class Producto
     {

@@ -1,7 +1,9 @@
-﻿@{
+﻿@model mvc.Entities.ViewModels.LoginViewModel
+@{
     Layout = "_LayoutLogin";
     ViewData["Title"] = "Login";
 }
+
 
 <div class="d-flex justify-content-center align-items-center login-container">
     <div class="bg-white p-4 rounded-4 shadow login-box">
@@ -11,20 +13,18 @@
         </div>
         <h4 class="text-center">Iniciar Sesión</h4>
 
-        <!-- Mostrar el mensaje de error si las credenciales son incorrectas -->
-        @if (ViewBag.Error != null)
-        {
-            <div class="alert alert-danger">
-                @ViewBag.Error
-            </div>
-        }
-
-        <form method="post" action="/Login/Login" class="gap-3">
+        <form method="post" asp-action="Login" asp-controller="Login" novalidate class="gap-3">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            }
             <div class="form-group mb-3">
-                <label for="gmail" class="caption-regular">Correo</label>
-                <input type="email" id="gmail" name="gmail" class="form-control rounded-3 body-01-regular py-2" required placeholder="Ingrese su correo electrónico" />
-                <label for="contrasenia" class="caption-regular">Contraseña</label>
-                <input type="password" id="contrasenia" name="contrasenia" class="form-control body-01-regular py-2" required placeholder="Ingrese su contraseña" />
+                <label asp-for="correo" class="caption-regular">Correo</label>
+                <input asp-for="correo" type="email" name="correo" class="form-control rounded-3 body-01-regular py-2" placeholder="Ingrese su correo electrónico" />
+                <span asp-validation-for="correo" class="text-danger d-block"></span>
+                <label asp-for="contrasenia" class="caption-regular">Contraseña</label>
+                <input asp-for="contrasenia" type="password" name="contrasenia" class="form-control body-01-regular py-2" placeholder="Ingrese su contraseña" />
+                <span asp-validation-for="contrasenia" class="text-danger d-block"></span>
             </div>    
             <div class="d-grid pb-8">
                 <button type="submit" class="body-01-semibold btn-primary-01">Ingresar</button>
@@ -34,7 +34,9 @@
     </div>
 </div>
 
-
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
 
 
 

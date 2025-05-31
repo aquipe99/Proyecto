@@ -1,4 +1,4 @@
-﻿using mvc.Entities.UsuarioEntities;
+﻿using mvc.Entities.BaseEntities.UsuarioEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

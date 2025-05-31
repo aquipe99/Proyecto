@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using mvc.DataAccess.Servicios;
-using mvc.Entities.ProductoEntites;
-using mvc.Entities.UsuarioEntities;
+using mvc.Entities.BaseEntities.UsuarioEntities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
