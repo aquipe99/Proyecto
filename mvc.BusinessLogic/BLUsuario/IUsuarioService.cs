@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SR.Entities.BaseEntities.UsuarioEntities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace mvc.BusinessLogic.BLUsuario
 {
     public interface IUsuarioService
     {
-        bool ValidarLogin(string gmail, string contrasenia);
+        LoginResultado ValidarLogin(string correo, string contrasenia);
     }
 }

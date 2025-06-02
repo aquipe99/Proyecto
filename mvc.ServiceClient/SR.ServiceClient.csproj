@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\mvc.DataAccess\mvc.DataAccess.csproj" />
-    <ProjectReference Include="..\mvc.Entities\mvc.Entities.csproj" />
+    <ProjectReference Include="..\mvc.BusinessLogic\SR.BusinessLogic.csproj" />
+    <ProjectReference Include="..\mvc.Entities\SR.Entities.csproj" />
   </ItemGroup>
 
 </Project>

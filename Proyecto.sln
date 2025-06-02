@@ -11,17 +11,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Services", "3. Services"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. Presentation", "4. Presentation", "{B1C0855E-D4EA-4C54-926B-8FA66DF9EBFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mvc.Entities", "mvc.Entities\mvc.Entities.csproj", "{A9E3EBC3-7924-44DF-B8CD-58F7FCA59EE3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SR.Entities", "mvc.Entities\SR.Entities.csproj", "{A9E3EBC3-7924-44DF-B8CD-58F7FCA59EE3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.1 DataAccess", "2.1 DataAccess", "{3D9FC618-A76B-4377-8E34-5FBB2392A530}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.2 BusinessLogic", "2.2 BusinessLogic", "{67F85B15-6DB4-4F9F-97DC-002EED985D3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mvc.DataAccess", "mvc.DataAccess\mvc.DataAccess.csproj", "{CB1759BC-F1CE-4153-B567-ED4A34668438}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SR.DataAccess", "mvc.DataAccess\SR.DataAccess.csproj", "{CB1759BC-F1CE-4153-B567-ED4A34668438}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mvc.BusinessLogic", "mvc.BusinessLogic\mvc.BusinessLogic.csproj", "{E93FA9D2-4FE4-4F12-ADC9-E9E9894850B1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SR.BusinessLogic", "mvc.BusinessLogic\SR.BusinessLogic.csproj", "{E93FA9D2-4FE4-4F12-ADC9-E9E9894850B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mvc.ServiceClient", "mvc.ServiceClient\mvc.ServiceClient.csproj", "{73ABD201-EAA7-4753-8F22-775D1AAB44B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SR.ServiceClient", "mvc.ServiceClient\SR.ServiceClient.csproj", "{73ABD201-EAA7-4753-8F22-775D1AAB44B0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mvc.Presentation", "mvc.Presentation\mvc.Presentation.csproj", "{5D45B278-89EF-45F8-B658-650C798C8C4D}"
 EndProject

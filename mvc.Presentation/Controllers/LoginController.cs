@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using mvc.Entities.ViewModels;
 using mvc.ServiceClient.SCUsuario;
+using SR.Entities.BaseEntities.UsuarioEntities;
 using System.Security.Claims;
 
 namespace mvc.Presentation.Controllers
@@ -26,7 +27,9 @@ namespace mvc.Presentation.Controllers
             {
                 return View("Index", model);
             }
-            if (_usuarioClient.ValidarLogin(model.correo,model.contrasenia)) {
+            var resultado = _usuarioClient.ValidarLogin(model.correo, model.contrasenia);
+            if (resultado == LoginResultado.Exito)
+            {
                 var claims = new List<Claim> {
                     new Claim(ClaimTypes.Name,model.correo)
                 };
@@ -35,7 +38,13 @@ namespace mvc.Presentation.Controllers
                 HttpContext.SignInAsync("CookieAuth", principal).Wait();
                 return RedirectToAction("Index", "Producto");
             }
-            ModelState.AddModelError(string.Empty, "Credenciales incorrectas.");
+            if (resultado == LoginResultado.UsuarioBloqueado)
+            {
+                ModelState.AddModelError(string.Empty, "Su cuenta ha sido desactivada. Contacte al administrador.");
+            }
+            else {
+                ModelState.AddModelError(string.Empty, "Credenciales incorrectas.");
+            }             
             return View("Index");
         }
         public IActionResult Logout() {

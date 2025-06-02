@@ -1,4 +1,5 @@
 ﻿using mvc.BusinessLogic.BLUsuario;
+using SR.Entities.BaseEntities.UsuarioEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,9 @@ namespace mvc.ServiceClient.SCUsuario
             _usuarioservice = usuarioservice;
         }
 
-        public bool ValidarLogin(string gmail, string contrasenia)
+        public LoginResultado ValidarLogin(string correo, string contrasenia)
         {
-            return _usuarioservice.ValidarLogin(gmail, contrasenia);
+            return _usuarioservice.ValidarLogin(correo, contrasenia);
         }
     }
 }

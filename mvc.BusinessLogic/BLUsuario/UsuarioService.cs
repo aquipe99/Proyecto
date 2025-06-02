@@ -1,4 +1,8 @@
-﻿using mvc.DataAccess.DAUsuario;
+﻿using Microsoft.AspNetCore.Identity;
+using mvc.DataAccess.DAUsuario;
+using mvc.Entities.BaseEntities.RolEntities;
+using mvc.Entities.BaseEntities.UsuarioEntities;
+using SR.Entities.BaseEntities.UsuarioEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +20,48 @@ namespace mvc.BusinessLogic.BLUsuario
             _usuarioRepository = usuarioRepository;
         }
 
-        public bool ValidarLogin(string gmail, string contrasenia)
+        public LoginResultado ValidarLogin(string correo, string contrasenia)
         {
-            var usuario = _usuarioRepository.ObtenerPorUsuarioGmail(gmail);
-            if(usuario == null || string.IsNullOrEmpty(usuario.Correo)) return false;
-            return usuario.Contrasenia==contrasenia;
+            try
+            {
+                //var nuevoUsuario = new Usuario
+                //{
+                //    Nombre = "admin",
+                //    Telefono = "999999999",
+                //    Correo = "admin@gmail.com",                    
+                //    Rol_id = new Rol { Id = 1 },
+                //    UsuarioCrea = null,
+                //    Estado = true
+                //};
+                //var passwordHasher = new PasswordHasher<Usuario>();
+                //string passwordPlano = "SR@min123";
+                //nuevoUsuario.Contrasenia = passwordHasher.HashPassword(nuevoUsuario, passwordPlano);
+                //bool resul = _usuarioRepository.SaveUsaurio(nuevoUsuario);
+       
+
+                var usuario = _usuarioRepository.BuscarUsuarioPorCorreo(correo);
+                if (usuario == null)
+                {
+                    return LoginResultado.CredencialesIncorrectas;
+                }
+                if (usuario.Estado ==false)
+                {
+                    return LoginResultado.UsuarioBloqueado;
+                }
+                var passwordHasher = new PasswordHasher<Usuario>();
+                var resultadoPassword = passwordHasher.VerifyHashedPassword(usuario, usuario.Contrasenia, contrasenia);
+
+                if (resultadoPassword == PasswordVerificationResult.Failed)
+                {
+                    return LoginResultado.CredencialesIncorrectas; 
+                }
+                return LoginResultado.Exito;
+            }
+            catch (Exception ex) {
+                throw new Exception("Error: ", ex);
+            }
+   
+         
         }
     }
 }

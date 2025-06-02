@@ -4,6 +4,7 @@ using mvc.Entities.BaseEntities.UsuarioEntities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,5 +53,68 @@ namespace mvc.DataAccess.DAUsuario
                 }
             }
         }
+        public Usuario BuscarUsuarioPorCorreo(string correo)
+        {
+            try
+            {
+                using var connection = new SqlConnection(_connectionString);
+                using var command = new SqlCommand("SP_USUARIO_SELECT_POR_CORREO", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.Add("@CORREO",SqlDbType.NVarChar,100).Value= correo;               
+
+                connection.Open();
+                using var reader = command.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new Usuario
+                    {
+                        Id= reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]):0,
+                        Correo = reader["CORREO"] != DBNull.Value ? reader["CORREO"].ToString() : string.Empty,
+                        Contrasenia = reader["CONTRASENIA"] != DBNull.Value ? reader["CONTRASENIA"].ToString() : string.Empty,
+                        Estado = reader["ESTADO"] != DBNull.Value ? Convert.ToBoolean(reader["ESTADO"]) : false
+                    };
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+               
+                throw new Exception("Error: ", ex);
+            }
+        }
+        public bool SaveUsaurio(Usuario usuario)
+        {
+            try
+            {
+                using var connection = new SqlConnection(_connectionString);
+                using var command = new SqlCommand("SP_USUARIO_INSERT_UPDATE", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.Add("@ID", SqlDbType.Int,4).Value = usuario.Id;
+                command.Parameters.Add("@NOMBRE", SqlDbType.NVarChar, 20).Value = usuario.Nombre;
+                command.Parameters.Add("@TELEFONO", SqlDbType.NVarChar,10).Value = usuario.Telefono;
+                command.Parameters.Add("@CORREO", SqlDbType.NVarChar, 100).Value = usuario.Correo;
+                command.Parameters.Add("@CONTRASENIA", SqlDbType.NVarChar, 255).Value = usuario.Contrasenia;
+                command.Parameters.Add("@ROL_ID", SqlDbType.Int,4).Value = usuario.Rol_id?.Id;
+                command.Parameters.Add("@USUARIO", SqlDbType.Int, 4).Value = usuario.UsuarioCrea;
+                command.Parameters.Add("@ESTADO", SqlDbType.Int, 4).Value = usuario.Estado;
+                connection.Open();
+                command.ExecuteNonQuery();
+                int result = command.ExecuteNonQuery();
+
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error: ", ex);
+            }
+        }
+
     }
+
 }

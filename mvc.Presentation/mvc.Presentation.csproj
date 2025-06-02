@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\mvc.Entities\mvc.Entities.csproj" />
-    <ProjectReference Include="..\mvc.ServiceClient\mvc.ServiceClient.csproj" />
+    <ProjectReference Include="..\mvc.Entities\SR.Entities.csproj" />
+    <ProjectReference Include="..\mvc.ServiceClient\SR.ServiceClient.csproj" />
   </ItemGroup>
 
   <ItemGroup>

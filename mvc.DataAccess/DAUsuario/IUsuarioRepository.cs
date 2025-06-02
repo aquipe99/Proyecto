@@ -10,5 +10,7 @@ namespace mvc.DataAccess.DAUsuario
     public interface IUsuarioRepository
     {
         Usuario ObtenerPorUsuarioGmail(string gmail);
+        Usuario BuscarUsuarioPorCorreo(string correo);
+        bool SaveUsaurio(Usuario usuario);
     }
 }
