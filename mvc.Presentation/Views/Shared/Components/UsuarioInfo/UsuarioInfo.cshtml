@@ -1,8 +1,16 @@
 ﻿@model mvc.Entities.BaseEntities.UsuarioEntities.Usuario
-
-<div class="d-flex align-items-center p-3  rounded mb-3">
-    <i class="bi bi-person-circle text-primary fs-3 me-2"></i>
-    <div>
-        <div class="body-regular-01-texto">@Model.Nombre</div>
-    </div>
+<div>
+    <div class="heading-03-bold color-texto ">@Model.Titulo</div>
 </div>
+<div class="d-flex justify-content-between align-items-center p-3  rounded mb-3">
+  
+    
+    <div class="d-flex align-items-center">
+        <i class="bi bi-person-circle text-primary fs-3 me-2"></i>
+        <div>
+            <div class="body-regular-01-texto table-background">@Model.Nombre</div>
+        </div>
+    </div>
+  
+</div>
+

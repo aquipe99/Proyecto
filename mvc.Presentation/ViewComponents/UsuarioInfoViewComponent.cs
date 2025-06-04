@@ -13,10 +13,12 @@ namespace SR.Presentation.ViewComponents
             var nombre = claims.FindFirst(ClaimTypes.Name)?.Value ?? "";
             var rol_name = claims.FindFirst(ClaimTypes.Role)?.Value ?? "";
 
+            var titulo = ViewContext.ViewData["Titulo"]?.ToString() ?? "";
             var modelo = new Usuario
             {
                 Nombre = nombre,
-                RolName = rol_name
+                RolName = rol_name,
+                Titulo = titulo
             };
 
             return View("UsuarioInfo", modelo);

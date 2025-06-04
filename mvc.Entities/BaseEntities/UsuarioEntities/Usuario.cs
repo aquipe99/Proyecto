@@ -14,14 +14,15 @@ namespace mvc.Entities.BaseEntities.UsuarioEntities
         public string? Nombre { get; set; }
         public string? Telefono { get; set; }
         public string? Correo { get; set; } 
-        public string? Contrasenia { get; set; }
+        public string? Contrasenia { get; set; }        
         public Rol? Rol_id { get; set; }
-        public DateTime? UsuarioCrea { get; set; }
+        public int? UsuarioCrea { get; set; }
         public int? UsuarioModifica { get; set; }
         public DateTime? FechaModifica { get; set; }
         public Boolean? Estado { get; set; }
         public LoginResultado LoginResultado { get; set; }
         public string? RolName { get; set; }
+        public string? Titulo { get; set; }
 
     }
 }

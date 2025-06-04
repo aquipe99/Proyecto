@@ -11,10 +11,10 @@ namespace mvc.Entities.ViewModels
     {
         [Required(ErrorMessage ="El correo es obligatorio")]
         [EmailAddress(ErrorMessage ="Ingrese un correo válido")]
-        public string correo { get; set; }
+        public string? correo { get; set; }
 
         [Required(ErrorMessage ="La contraseña es obligatoria")]
         [DataType(DataType.Password)]
-        public string contrasenia { get; set; }
+        public string? contrasenia { get; set; }
     }
 }

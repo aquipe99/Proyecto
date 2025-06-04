@@ -104,8 +104,7 @@ namespace mvc.DataAccess.DAUsuario
                 command.Parameters.Add("@ROL_ID", SqlDbType.Int,4).Value = usuario.Rol_id?.Id;
                 command.Parameters.Add("@USUARIO", SqlDbType.Int, 4).Value = usuario.UsuarioCrea;
                 command.Parameters.Add("@ESTADO", SqlDbType.Int, 4).Value = usuario.Estado;
-                connection.Open();
-                command.ExecuteNonQuery();
+                connection.Open();               
                 int result = command.ExecuteNonQuery();
 
                 return result > 0;

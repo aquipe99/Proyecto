@@ -1,0 +1,70 @@
+﻿using Azure;
+using SR.DataAccess.DACancha;
+using SR.Entities.BaseEntities.CanchaEntities;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SR.BusinessLogic.BLCancha
+{
+    public class CanchaService : ICanchaService
+    {
+        private readonly ICanchaRepository _canchaRepository;
+
+        public CanchaService(ICanchaRepository canchaRepository)
+        {
+            _canchaRepository = canchaRepository;
+        }
+
+        public bool GuardarCancha(Cancha cancha)
+        {
+            try
+            {
+                return _canchaRepository.GuardarCancha(cancha);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+
+        public Cancha ObtenerCanchaPorId(int Id)
+        {
+            try
+            {
+                return _canchaRepository.ObtenerCanchaPorId(Id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+
+        public ObservableCollection<Cancha> ObtenerListaCanchas(int page, int pageSize)
+        {
+            try
+            {
+                return _canchaRepository.ObtenerListaCanchas(page,pageSize);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+
+        public bool ValidarCanchaNombre(string nombre)
+        {
+            try
+            {
+                return _canchaRepository.ValidarCanchaNombre(nombre);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+    }
+}
