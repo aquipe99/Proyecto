@@ -74,10 +74,12 @@ namespace mvc.DataAccess.DAUsuario
                         Id= reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]):0,
                         Correo = reader["CORREO"] != DBNull.Value ? reader["CORREO"].ToString() : string.Empty,
                         Contrasenia = reader["CONTRASENIA"] != DBNull.Value ? reader["CONTRASENIA"].ToString() : string.Empty,
-                        Estado = reader["ESTADO"] != DBNull.Value ? Convert.ToBoolean(reader["ESTADO"]) : false
+                        Estado = reader["ESTADO"] != DBNull.Value ? Convert.ToBoolean(reader["ESTADO"]) : false,
+                        RolName = reader["ROL_NAME"] != DBNull.Value ? reader["ROL_NAME"].ToString() : string.Empty,
+                        Nombre = reader["NOMBRE"] != DBNull.Value ? reader["NOMBRE"].ToString() : string.Empty
                     };
                 }
-                return null;
+                return  null;
             }
             catch (Exception ex)
             {

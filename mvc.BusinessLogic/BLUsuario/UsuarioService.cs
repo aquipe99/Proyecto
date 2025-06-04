@@ -20,7 +20,7 @@ namespace mvc.BusinessLogic.BLUsuario
             _usuarioRepository = usuarioRepository;
         }
 
-        public LoginResultado ValidarLogin(string correo, string contrasenia)
+        public Usuario ValidarLogin(string correo, string contrasenia)
         {
             try
             {
@@ -42,20 +42,26 @@ namespace mvc.BusinessLogic.BLUsuario
                 var usuario = _usuarioRepository.BuscarUsuarioPorCorreo(correo);
                 if (usuario == null)
                 {
-                    return LoginResultado.CredencialesIncorrectas;
+                    return new Usuario
+                    {
+                        LoginResultado = LoginResultado.CredencialesIncorrectas
+                    };
                 }
                 if (usuario.Estado ==false)
                 {
-                    return LoginResultado.UsuarioBloqueado;
+                    usuario.LoginResultado = LoginResultado.UsuarioBloqueado;
+                    return usuario;
                 }
                 var passwordHasher = new PasswordHasher<Usuario>();
                 var resultadoPassword = passwordHasher.VerifyHashedPassword(usuario, usuario.Contrasenia, contrasenia);
 
                 if (resultadoPassword == PasswordVerificationResult.Failed)
                 {
-                    return LoginResultado.CredencialesIncorrectas; 
+                    usuario.LoginResultado = LoginResultado.CredencialesIncorrectas;
+                    return usuario; 
                 }
-                return LoginResultado.Exito;
+                usuario.LoginResultado = LoginResultado.Exito;
+                return usuario;
             }
             catch (Exception ex) {
                 throw new Exception("Error: ", ex);

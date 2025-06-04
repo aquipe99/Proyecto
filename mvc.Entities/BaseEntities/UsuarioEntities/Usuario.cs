@@ -1,4 +1,5 @@
 ﻿using mvc.Entities.BaseEntities.RolEntities;
+using SR.Entities.BaseEntities.UsuarioEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace mvc.Entities.BaseEntities.UsuarioEntities
         public int? UsuarioModifica { get; set; }
         public DateTime? FechaModifica { get; set; }
         public Boolean? Estado { get; set; }
+        public LoginResultado LoginResultado { get; set; }
+        public string? RolName { get; set; }
 
     }
 }

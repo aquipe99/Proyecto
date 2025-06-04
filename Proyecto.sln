@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SR.BusinessLogic", "mvc.Bus
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SR.ServiceClient", "mvc.ServiceClient\SR.ServiceClient.csproj", "{73ABD201-EAA7-4753-8F22-775D1AAB44B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mvc.Presentation", "mvc.Presentation\mvc.Presentation.csproj", "{5D45B278-89EF-45F8-B658-650C798C8C4D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SR.Presentation", "mvc.Presentation\SR.Presentation.csproj", "{5D45B278-89EF-45F8-B658-650C798C8C4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

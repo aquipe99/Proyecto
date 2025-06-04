@@ -1,4 +1,6 @@
-﻿using SR.Entities.BaseEntities.UsuarioEntities;
+﻿using mvc.Entities.BaseEntities.UsuarioEntities;
+using SR.Entities.BaseEntities.MenuEntities;
+using SR.Entities.BaseEntities.UsuarioEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,6 @@ namespace mvc.ServiceClient.SCUsuario
 {
     public interface IUsuarioClient
     {
-        LoginResultado ValidarLogin(string correo, string contrasenia);
+        Usuario ValidarLogin(string correo, string contrasenia);      
     }
 }

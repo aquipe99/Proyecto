@@ -27,18 +27,21 @@ namespace mvc.Presentation.Controllers
             {
                 return View("Index", model);
             }
-            var resultado = _usuarioClient.ValidarLogin(model.correo, model.contrasenia);
-            if (resultado == LoginResultado.Exito)
+            var usuario = _usuarioClient.ValidarLogin(model.correo, model.contrasenia);
+            if (usuario.LoginResultado == LoginResultado.Exito)
             {
                 var claims = new List<Claim> {
-                    new Claim(ClaimTypes.Name,model.correo)
+                    new Claim(ClaimTypes.NameIdentifier,usuario.Id.ToString()),
+                    new Claim(ClaimTypes.Name,usuario.Nombre ?? string.Empty),
+                    new Claim(ClaimTypes.Email,usuario.Correo  ?? string.Empty),
+                    new(ClaimTypes.Role,usuario.RolName ?? string.Empty)
                 };
                 var identity = new ClaimsIdentity(claims, "CookieAuth");
                 var principal = new ClaimsPrincipal(identity);
                 HttpContext.SignInAsync("CookieAuth", principal).Wait();
-                return RedirectToAction("Index", "Producto");
+                return RedirectToAction("Index", "Home");
             }
-            if (resultado == LoginResultado.UsuarioBloqueado)
+            if (usuario.LoginResultado == LoginResultado.UsuarioBloqueado)
             {
                 ModelState.AddModelError(string.Empty, "Su cuenta ha sido desactivada. Contacte al administrador.");
             }
@@ -49,8 +52,7 @@ namespace mvc.Presentation.Controllers
         }
         public IActionResult Logout() {
             HttpContext.SignOutAsync("CookieAuth").Wait();
-            return RedirectToAction("Index","Login");
-        
+            return RedirectToAction("Index","Login");        
         }
     }
 }

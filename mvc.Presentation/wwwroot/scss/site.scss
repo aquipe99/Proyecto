@@ -181,7 +181,7 @@ $eds-space-xxl-2: 3rem;     /* 48px */
 $eds-space-xxl-3: 5rem;     /* 80px */
 $eds-space-xxl-4: 7.5rem;
 
-$custom-spacers: ( 0: 0, 1: .25rem, 2: .5rem, 3: 1rem, 4: 1.5rem, 5: 3rem, 6: 2rem, 7: 2.5rem, 8: 3.5rem, 9: 4rem, 10: 4.5rem, 11: 5rem, );
+$custom-spacers: ( 0: 0, 1: .25rem, 2: .5rem, 3: 1rem, 4: 1.5rem, 5: 3rem, 6: 2rem, 7: 2.5rem, 8: 3.5rem, 9: 4rem, 10: 4.5rem, 11: 5rem,  12: 2.25rem);
 
 $utilities: () !default;
 
@@ -190,6 +190,10 @@ $utilities: map-merge( $utilities, ( "padding-y": ( responsive: true, property: 
 $utilities: map-merge( $utilities, ( "padding-end": ( responsive: true, property: padding-right, class: pe, values: $custom-spacers, ) ) );
 $utilities: map-merge( $utilities, ( "padding-top": ( responsive: true, property: padding-top, class: pt, values: $custom-spacers, ) ) );
 $utilities: map-merge($utilities, ( "padding-bottom": ( responsive: true, property: padding-bottom, class: pb, values: $custom-spacers, ) ));
+
+.icon-color {
+    color: $eds-color-gray-100;
+}
 
 .btn-primary-01 {
     display: flex;
@@ -206,11 +210,100 @@ $utilities: map-merge($utilities, ( "padding-bottom": ( responsive: true, proper
 
     &:hover {
         background: $eds-color-primary-blue-gradient-hover;
+   
     }
 
     &:active {
         background: $eds-color-primary-blue-gradient-active;
+  
     }
+}
+
+.logo-img {
+    max-width: 60px;
+}
+
+.layout {
+    display: flex;
+}
+
+.sidebar {
+    width: 256px;
+    background-color: #FFF;
+    min-height: 100vh;
+}
+
+.main-section {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.top-bar {
+    height: 56px;
+    /* padding: 0 20px; */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.main-content {
+    padding: 20px;
+    flex-grow: 1;
+    background-color: #fff;
+}
+
+.list-group-item {
+    .icon-color {
+        color: $eds-color-gray-500;
+        transition: color 0.2s ease;
+    }
+
+    &:hover {
+        .icon-color {
+            color: $eds-color-primary-blue-500;
+        }
+    }
+}
+
+.body-regular-01-menu {
+    display: flex;
+    height: 40px;
+    padding: 0px 8px;
+    align-items: center;
+    font-size: 16px;
+    font-family: $eds-font-family;
+    gap: 8px;
+    align-self: stretch;
+    --bs-list-group-border-color: $eds-color-white-50;
+    border-radius: $eds-space-sm !important;
+    background: $eds-color-white-50 !important;
+
+    &:hover {
+        background: $eds-color-primary-blue-100 !important;
+        color: $eds-color-primary-blue-500 !important;
+    }
+
+    &:active {
+        background: $eds-color-primary-blue-100 !important;
+        color: $eds-color-primary-blue-500 !important;
+    }
+}
+
+.body-regular-01-texto {
+    display: flex;
+    height: 40px;
+    padding: 0px 8px;
+    align-items: center;
+    font-size: 16px;
+    font-family: $eds-font-family;
+    gap: 8px;
+    align-self: stretch;
+    --bs-list-group-border-color: $eds-color-white-50;
+    border-radius: $eds-space-sm !important;
+    background: $eds-color-white-50 !important;
+
 }
 .body-login {
     html, body {

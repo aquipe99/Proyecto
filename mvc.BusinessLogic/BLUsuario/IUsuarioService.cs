@@ -1,4 +1,5 @@
-﻿using SR.Entities.BaseEntities.UsuarioEntities;
+﻿using mvc.Entities.BaseEntities.UsuarioEntities;
+using SR.Entities.BaseEntities.UsuarioEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace mvc.BusinessLogic.BLUsuario
 {
     public interface IUsuarioService
     {
-        LoginResultado ValidarLogin(string correo, string contrasenia);
+        Usuario ValidarLogin(string correo, string contrasenia);
     }
 }
