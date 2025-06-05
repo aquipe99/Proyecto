@@ -67,7 +67,7 @@ namespace SR.DataAccess.DACancha
                     return new Cancha
                     {
                         Id = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
-                        Nombre = reader["NOMBRE"] != DBNull.Value ? reader["V"].ToString() : string.Empty,
+                        Nombre = reader["NOMBRE"] != DBNull.Value ? reader["NOMBRE"].ToString() : string.Empty,
                         Descipcion = reader["DESCRIPCION"] != DBNull.Value ? reader["DESCRIPCION"].ToString() : string.Empty,
                         Estado = reader["ESTADO"] != DBNull.Value ? Convert.ToBoolean(reader["ESTADO"]) : false 
                     };
@@ -81,7 +81,7 @@ namespace SR.DataAccess.DACancha
             }
         }
 
-        public ObservableCollection<Cancha> ObtenerListaCanchas(int page, int pageSize)
+        public ObservableCollection<Cancha> ObtenerListaCanchas(int page, int pageSize, string buscar)
         {
 
             try
@@ -94,7 +94,15 @@ namespace SR.DataAccess.DACancha
                 };
                 command.Parameters.Add("@PAGE", SqlDbType.Int, 4).Value = page;
                 command.Parameters.Add("@PAGESIZE", SqlDbType.Int, 4).Value = pageSize;
-                connection.Open();
+                if (string.IsNullOrWhiteSpace(buscar))
+                {
+                    command.Parameters.Add("@BUSCAR", SqlDbType.NVarChar,20).Value = buscar;
+                }
+                else {
+                    command.Parameters.Add("@BUSCAR", SqlDbType.NVarChar, 20).Value = buscar.Trim();
+                }
+
+                    connection.Open();
                 using var reader = command.ExecuteReader();
 
                 while (reader.Read())
@@ -131,11 +139,28 @@ namespace SR.DataAccess.DACancha
                 connection.Open();
                 object result = command.ExecuteScalar();
 
-                if (result != null && int.TryParse(result.ToString(), out int intResult))
+                return result != null && Convert.ToBoolean(result);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error: ", ex);
+            }
+        }
+        public bool EliminarCanchaPorId(int Id)
+        {
+            try
+            {
+                using var connection = new SqlConnection(_connectionString);
+                using var command = new SqlCommand("SP_CANCHA_DELETE_POR_ID", connection)
                 {
-                    return intResult == 1;
-                }
-                return false;
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.Add("@ID", SqlDbType.Int, 4).Value = Id;
+                connection.Open();
+                int result = command.ExecuteNonQuery();
+
+                return result > 0;
             }
             catch (Exception ex)
             {

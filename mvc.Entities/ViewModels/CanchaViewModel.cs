@@ -15,5 +15,6 @@ namespace SR.Entities.ViewModels
         public string? Nombre { get; set; }
         [StringLength(20, ErrorMessage = "El Nombre no puede tener más de 20 caracteres")]
         public string? Descripcion { get; set; }
+        public Boolean? Estado { get; set; }
     }
 }

@@ -218,7 +218,27 @@ $utilities: map-merge($utilities, ( "padding-bottom": ( responsive: true, proper
   
     }
 }
+.btn-primary-white {
+    display: flex;
+    height: 40px;
+    padding: $eds-space-md;
+    justify-content: center;
+    align-items: center;
+    gap: $eds-space-xs;
+    align-self: stretch;
+    border-radius: $eds-radius-sm;
+    background: #fff;
+    color: #0B6699 !important;
+    border: none;
 
+    &:hover {
+        background: #E2F2FC;
+    }
+
+    &:active {
+        background: #fff;
+    }
+}
 .logo-img {
     max-width: 60px;
 }

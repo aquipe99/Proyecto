@@ -48,7 +48,7 @@
     <script>
                 // Función para cargar la tabla con datos paginados y filtrados
         function cargarTabla(page = 1, pageSize = 5, search = '') {
-            const url = `/Cancha/Paginar?page=${page}&pageSize=${pageSize}&search=${encodeURIComponent(search)}`;
+            const url = `/Cancha/Paginar?page=${page}&pageSize=${pageSize}&buscar=${encodeURIComponent(search)}`;
 
             $.ajax({
                 url: url,
@@ -131,7 +131,27 @@
                         alert('Error al enviar el formulario');
                     });
             });
+                    // Delegación para envío del formulario de eliminación por AJAX
+            $(document).off('submit', '#deleteCanchaForm').on('submit', '#deleteCanchaForm', function (e) {
+                e.preventDefault();
 
+                const $form = $(this);
+                const id = $form.find('input[name="id"]').val();
+
+                $.post(`/Cancha/DeleteCancha/${id}`)
+                    .done(function (response) {
+                        if (response.success) {
+                            const modal = bootstrap.Modal.getInstance($('#canchaModal')[0]);
+                            modal.hide();
+                            cargarTabla(); // Recargar la tabla actualizada
+                        } else {
+                            alert('No se pudo eliminar la cancha.');
+                        }
+                    })
+                    .fail(function () {
+                        alert('Error en la solicitud de eliminación.');
+                    });
+            });
             // Inicializar paginación al cargar la página
             cargarTabla(); // Cargar tabla inicial al cargar documento
         });

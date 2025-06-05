@@ -19,6 +19,18 @@ namespace SR.ServiceClient.SCCancha
             _canchaService = canchaService;
         }
 
+        public bool EliminarCanchaPorId(int Id)
+        {
+            try
+            {
+                return _canchaService.EliminarCanchaPorId(Id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+
         public bool GuardarCancha(Cancha cancha)
         {
             try
@@ -43,11 +55,11 @@ namespace SR.ServiceClient.SCCancha
             }
         }
 
-        public ObservableCollection<Cancha> ObtenerListaCanchas(int page, int pageSize)
+        public ObservableCollection<Cancha> ObtenerListaCanchas(int page, int pageSize, string buscar)
         {
             try
             {
-                return _canchaService.ObtenerListaCanchas(page, pageSize);
+                return _canchaService.ObtenerListaCanchas(page, pageSize,buscar);
             }
             catch (Exception ex)
             {

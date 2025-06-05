@@ -14,9 +14,9 @@ namespace SR.Presentation.Controllers
         public CanchaController(ICanchaClient canchaClient) { 
             _canchaClient = canchaClient;
         }
-        public IActionResult Index(int page = 1, int pageSize = 5)
+        public IActionResult Index(int page = 1, int pageSize = 5,string buscar="")
         {
-            var canchas = _canchaClient.ObtenerListaCanchas(page, pageSize);
+            var canchas = _canchaClient.ObtenerListaCanchas(page, pageSize, buscar);
             ViewData["Page"] = page;
             ViewData["PageSize"] = pageSize;
             ViewData["TotalCount"] = (canchas != null && canchas.Any()) ? canchas.First().Total : 0;
@@ -26,9 +26,9 @@ namespace SR.Presentation.Controllers
             }
             return View(canchas);
         }
-        public IActionResult Paginar(int page = 1, int pageSize = 5)
+        public IActionResult Paginar(int page = 1, int pageSize = 5,string buscar="")
         {
-            var canchas = _canchaClient.ObtenerListaCanchas(page, pageSize);
+            var canchas = _canchaClient.ObtenerListaCanchas(page, pageSize,buscar);
             ViewData["Page"] = page;
             ViewData["PageSize"] = pageSize;
             ViewData["TotalCount"] = (canchas != null && canchas.Any()) ? canchas.First().Total : 0;
@@ -60,23 +60,59 @@ namespace SR.Presentation.Controllers
             }
             return PartialView("_CanchaForm", cancha);
         }
-
+        [HttpGet]
         public IActionResult Edit(int id)
         {
-            var cancha = _canchaClient.ObtenerCanchaPorId(id);
-            if (cancha == null) return NotFound();
+            var model = _canchaClient.ObtenerCanchaPorId(id);
+            if (model == null) return NotFound();
+            CanchaViewModel cancha = new CanchaViewModel();
+            cancha.Id = model.Id;
+            cancha.Nombre = model.Nombre;
+            cancha.Descripcion = model.Descipcion;
+            cancha.Estado = model.Estado;
             return PartialView("_CanchaForm", cancha);
         }
 
         [HttpPost]
-        public IActionResult Edit(Cancha cancha)
+        public IActionResult Edit(CanchaViewModel cancha)
         {
+            if (_canchaClient.ValidarCanchaNombre(cancha.Nombre))
+            {
+                ModelState.AddModelError("Nombre", "Ya existe una cancha con ese nombre.");
+            }
             if (ModelState.IsValid)
             {
-                _canchaClient.GuardarCancha(cancha);
-                return RedirectToAction("Index");
+                var claims = HttpContext.User;
+                var idClaim = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var userId = int.TryParse(idClaim, out var idParsed) ? idParsed : 0;
+                Cancha model = new Cancha();
+                model.Id=cancha.Id;
+                model.Nombre = cancha.Nombre;
+                model.Descipcion = cancha.Descripcion;
+                model.UsuarioModifica = userId;
+                _canchaClient.GuardarCancha(model);
+                return Json(new { success = true });
             }
             return PartialView("_CanchaForm", cancha);
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var model = _canchaClient.ObtenerCanchaPorId(id);
+            if (model == null) return NotFound();
+            CanchaViewModel cancha = new CanchaViewModel();
+            cancha.Id = model.Id;
+            cancha.Nombre = model.Nombre;       
+            return PartialView("_CanchaDelete", cancha);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteCancha(int id)
+        {
+            var model = _canchaClient.EliminarCanchaPorId(id);
+            return Json(new { success = true });
+
         }
     }
 }

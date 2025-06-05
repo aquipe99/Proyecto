@@ -19,6 +19,18 @@ namespace SR.BusinessLogic.BLCancha
             _canchaRepository = canchaRepository;
         }
 
+        public bool EliminarCanchaPorId(int Id)
+        {
+            try
+            {
+                return _canchaRepository.EliminarCanchaPorId(Id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+
         public bool GuardarCancha(Cancha cancha)
         {
             try
@@ -43,11 +55,11 @@ namespace SR.BusinessLogic.BLCancha
             }
         }
 
-        public ObservableCollection<Cancha> ObtenerListaCanchas(int page, int pageSize)
+        public ObservableCollection<Cancha> ObtenerListaCanchas(int page, int pageSize, string buscar)
         {
             try
             {
-                return _canchaRepository.ObtenerListaCanchas(page,pageSize);
+                return _canchaRepository.ObtenerListaCanchas(page,pageSize,buscar);
             }
             catch (Exception ex)
             {

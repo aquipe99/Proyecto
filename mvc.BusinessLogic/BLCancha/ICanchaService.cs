@@ -13,6 +13,7 @@ namespace SR.BusinessLogic.BLCancha
         bool ValidarCanchaNombre(string nombre);
         Cancha ObtenerCanchaPorId(int Id);
         bool GuardarCancha(Cancha cancha);
-        ObservableCollection<Cancha> ObtenerListaCanchas(int page, int pageSize);
+        ObservableCollection<Cancha> ObtenerListaCanchas(int page, int pageSize, string buscar);
+        bool EliminarCanchaPorId(int Id);
     }
 }
