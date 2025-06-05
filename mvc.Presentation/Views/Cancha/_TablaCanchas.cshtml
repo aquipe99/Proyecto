@@ -1,0 +1,78 @@
+﻿@using System.Collections.ObjectModel
+@using SR.Entities.BaseEntities.CanchaEntities
+@model ObservableCollection<Cancha>
+@{
+    int totalCount = (int)ViewData["TotalCount"];
+    int page = (int)ViewData["Page"];
+    int pageSize = (int)ViewData["PageSize"];
+    int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+}
+
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-light body-02-semibold">
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var cancha in Model)
+                {
+                    <tr>
+                        <td>@cancha.Nombre</td>
+                        <td>@cancha.Descipcion</td>
+                        <td>
+                            <a href="/Canchas/Edit/@cancha.Id" class="btn btn-sm btn-outline-primary me-1" title="Editar">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a href="/Canchas/Details/@cancha.Id" class="btn btn-sm btn-outline-secondary me-1" title="Ver">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="/Canchas/Delete/@cancha.Id" class="btn btn-sm btn-outline-danger" title="Eliminar">
+                                <i class="bi bi-x-lg"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3" class="text-center text-muted py-4">
+                        <i class="bi bi-info-circle"></i> No se encontraron registros.
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mt-3">
+    <div>
+        Mostrando @(((page - 1) * pageSize) + 1) - @(Math.Min(page * pageSize, totalCount)) de @totalCount registros
+    </div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination mb-0">
+            <li class="page-item @(page == 1 ? "disabled" : "")">
+                <a class="page-link" href="#" data-page="@(page - 1)" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == page ? "active" : "")">
+                    <a class="page-link" href="#" data-page="@i">@i</a>
+                </li>
+            }
+            <li class="page-item @(page == totalPages ? "disabled" : "")">
+                <a class="page-link" href="#" data-page="@(page + 1)" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>

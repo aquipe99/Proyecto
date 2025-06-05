@@ -14,20 +14,24 @@ namespace SR.Presentation.Controllers
         public CanchaController(ICanchaClient canchaClient) { 
             _canchaClient = canchaClient;
         }
-        public IActionResult Index()
+        public IActionResult Index(int page = 1, int pageSize = 5)
         {
-            int page = 1; 
-            int pageSize = 5;
             var canchas = _canchaClient.ObtenerListaCanchas(page, pageSize);
             ViewData["Page"] = page;
             ViewData["PageSize"] = pageSize;
             ViewData["TotalCount"] = (canchas != null && canchas.Any()) ? canchas.First().Total : 0;
-
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+            {
+                return PartialView("_TablaCanchas", canchas);
+            }
             return View(canchas);
         }
         public IActionResult Paginar(int page = 1, int pageSize = 5)
         {
             var canchas = _canchaClient.ObtenerListaCanchas(page, pageSize);
+            ViewData["Page"] = page;
+            ViewData["PageSize"] = pageSize;
+            ViewData["TotalCount"] = (canchas != null && canchas.Any()) ? canchas.First().Total : 0;
             return PartialView("_TablaCanchas", new ObservableCollection<Cancha>(canchas));
         }
         public IActionResult Create()

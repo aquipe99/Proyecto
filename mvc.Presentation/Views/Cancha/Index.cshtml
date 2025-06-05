@@ -4,192 +4,137 @@
 @{
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
     ViewData["Titulo"] = "Cancha";
+    var selectedSize = ViewData["PageSize"] != null ? (int)ViewData["PageSize"] : 5;
 }
 
 <div class="container py-4 table-background-white">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="input-group w-50">
             <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
-            <input type="text" class="form-control border-start-0" placeholder="Type to search" id="searchBox">
+            <input type="text" class="form-control border-start-0" placeholder="Buscar por nombre" id="searchBox">
         </div>
         <button type="button" class="body-01-semibold btn-primary-01" data-bs-toggle="modal" data-bs-target="#canchaModal" data-url="/Cancha/Create">
             <i class="bi bi-plus-lg"></i> Nueva cancha
         </button>
     </div>
 
-    <!-- Selector de filas a mostrar -->
     <div class="d-flex align-items-center mb-3">
         <label for="pageSizeSelect" class="me-2">Mostrar:</label>
-        <select id="pageSizeSelect" name="pageSize" class="form-select form-select-sm" style="width: auto;">
-            <option value="5" selected="@(ViewData["PageSize"] != null && (int)ViewData["PageSize"] == 5 ? "selected" : null)">5</option>
-            <option value="10" selected="@(ViewData["PageSize"] != null && (int)ViewData["PageSize"] == 10 ? "selected" : null)">10</option>
-            <option value="20" selected="@(ViewData["PageSize"] != null && (int)ViewData["PageSize"] == 20 ? "selected" : null)">20</option>
+        <select id="pageSizeSelect" class="form-select form-select-sm" style="width: auto;">
+            @foreach (var size in new[] { 5, 10, 20 })
+            {
+                var selected = size == selectedSize ? "selected" : "";
+                <option value="@size" selected="@selected">@size</option>
+            }
         </select>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-hover align-middle">
-            <thead class="table-light body-02-semibold">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tablaCanchas" class="body-02-regular">
-                @if (Model != null && Model.Any())
-                {
-                    foreach (var cancha in Model)
-                    {
-                        <tr>
-                            <td>@cancha.Nombre</td>
-                            <td>@cancha.Descipcion</td>
-                            <td>
-                                <a href="/Canchas/Edit/@cancha.Id" class="btn btn-sm btn-outline-primary me-1" title="Editar">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <a href="/Canchas/Details/@cancha.Id" class="btn btn-sm btn-outline-secondary me-1" title="Ver">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <a href="/Canchas/Delete/@cancha.Id" class="btn btn-sm btn-outline-danger" title="Eliminar">
-                                    <i class="bi bi-x-lg"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="3" class="text-center text-muted py-4">
-                            <i class="bi bi-info-circle"></i> No se encontraron registros.
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <div id="tablaCanchas">
+        @await Html.PartialAsync("_TablaCanchas", Model)
     </div>
-
-    <!-- Paginación y total de registros -->
-@if (ViewData["TotalCount"] != null && ViewData["Page"] != null && ViewData["PageSize"] != null)
-    {
-        int totalCount = (int)ViewData["TotalCount"];
-        int page = (int)ViewData["Page"];
-        int pageSize = (int)ViewData["PageSize"];
-        int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
-
-        <div class="d-flex justify-content-between align-items-center mt-3">
-            <div>
-                Mostrando @(((page - 1) * pageSize) + 1) - @(Math.Min(page * pageSize, totalCount)) de @totalCount registros
-            </div>
-            <nav aria-label="Page navigation example">
-                <ul class="pagination mb-0">
-                    <li class="page-item @(page == 1 ? "disabled" : "")">
-                        <a class="page-link" href="?page=@(page - 1)&pageSize=@pageSize" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-
-                    @for (int i = 1; i <= totalPages; i++)
-                    {
-                        <li class="page-item @(i == page ? "active" : "")">
-                            <a class="page-link" href="?page=@i&pageSize=@pageSize">@i</a>
-                        </li>
-                    }
-
-                    <li class="page-item @(page == totalPages ? "disabled" : "")">
-                        <a class="page-link" href="?page=@(page + 1)&pageSize=@pageSize" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    }
-
 </div>
+
+<!-- Modal -->
 <div class="modal fade" id="canchaModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content" id="canchaModalContent">
-            <!-- Aquí se cargará el contenido dinámicamente -->
+            <!-- Contenido dinámico -->
         </div>
     </div>
 </div>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-             document.getElementById('pageSizeSelect').addEventListener('change', function () {
-            const pageSize = this.value;
-            const page = 1; // al cambiar el tamaño, volvemos a la primera página
+                // Función para cargar la tabla con datos paginados y filtrados
+        function cargarTabla(page = 1, pageSize = 5, search = '') {
+            const url = `/Cancha/Paginar?page=${page}&pageSize=${pageSize}&search=${encodeURIComponent(search)}`;
 
-            fetch(`/Canchas/Paginar?page=${page}&pageSize=${pageSize}`, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
+            $.ajax({
+                url: url,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                method: 'GET',
+                success: function (html) {
+                    $('#tablaCanchas').html(html);
+                    inicializarEventosPaginacion(); // Reasignar eventos después de cargar
+                },
+                error: function (err) {
+                    console.error('Error al cargar la tabla:', err);
                 }
-            })
-            .then(response => response.text())
-            .then(html => {
-                // Reemplazar solo el contenido de la tabla
-                document.getElementById('tablaCanchas').innerHTML = html;
-            })
-            .catch(error => {
-                console.error('Error al cargar la tabla:', error);
             });
-        });
+        }
 
+        // Inicializa eventos de paginación
+        function inicializarEventosPaginacion() {
+            $('.pagination .page-link').off('click').on('click', function (e) {
+                e.preventDefault();
+                const page = $(this).data('page');
+                const pageSize = $('#pageSizeSelect').val();
+                const search = $('#searchBox').val();
+                if (page) {
+                    cargarTabla(page, pageSize, search);
+                }
+            });
+        }
 
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll('[data-bs-target="#canchaModal"]').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const url = this.getAttribute('data-url');
-                    fetch(url)
-                        .then(res => res.text())
-                        .then(html => {
-                            document.getElementById('canchaModalContent').innerHTML = html;
-                        });
+        // Document ready
+        $(document).ready(function () {
+            const $pageSizeSelect = $('#pageSizeSelect');
+            const $searchBox = $('#searchBox');
+
+            // Evento de cambio de cantidad de elementos por página
+            $pageSizeSelect.on('change', function () {
+                cargarTabla(1, $pageSizeSelect.val(), $searchBox.val());
+            });
+
+            // Evento de búsqueda en vivo
+            $searchBox.on('input', function () {
+                cargarTabla(1, $pageSizeSelect.val(), $searchBox.val());
+            });
+
+            // Abrir modal con contenido remoto desde botón con data-url
+            $('[data-bs-target="#canchaModal"]').on('click', function () {
+                const url = $(this).data('url');
+                $.get(url, function (html) {
+                    $('#canchaModalContent').html(html);
                 });
             });
 
-            document.addEventListener('click', function (e) {
-                if (e.target.closest('.open-modal')) {
-                    e.preventDefault();
-                    const url = e.target.closest('a').href;
-                    fetch(url)
-                        .then(res => res.text())
-                        .then(html => {
-                            document.getElementById('canchaModalContent').innerHTML = html;
-                            new bootstrap.Modal(document.getElementById('canchaModal')).show();
-                        });
-                }
-            });
-        });
-         $(document).off("submit", "#canchaForm").on("submit", "#canchaForm", function (e) {
-            e.preventDefault();  // evitar envío normal
-            var form = $(this);
-            var url = form.attr("action");
-            var data = form.serialize();
-
-            $.post(url, data)
-                .done(function (response) {
-                    if (typeof response === "object" && response.success) {
-                        // Éxito: cerrar modal y recargar tabla o página
-                        var modalEl = document.getElementById('canchaModal');
-                        var modal = bootstrap.Modal.getInstance(modalEl);
-                        modal.hide();
-
-                        location.reload(); // recargar toda la página
-                    } else {
-                        // Error: mostrar errores dentro del modal
-                        $("#canchaModalContent").html(response);
-                    }
-                })
-                .fail(function () {
-                    alert("Error al enviar el formulario");
+            // Delegación para abrir modal desde enlaces (clase .open-modal)
+            $(document).on('click', '.open-modal', function (e) {
+                e.preventDefault();
+                const url = $(this).attr('href');
+                $.get(url, function (html) {
+                    $('#canchaModalContent').html(html);
+                    new bootstrap.Modal($('#canchaModal')[0]).show();
                 });
-        });
+            });
 
+            // Delegación para envío de formulario vía AJAX
+            $(document).off('submit', '#canchaForm').on('submit', '#canchaForm', function (e) {
+                e.preventDefault();
+                const $form = $(this);
+                const url = $form.attr('action');
+                const data = $form.serialize();
+
+                $.post(url, data)
+                    .done(function (response) {
+                        if (typeof response === 'object' && response.success) {
+                            const modal = bootstrap.Modal.getInstance($('#canchaModal')[0]);
+                            modal.hide();
+                            cargarTabla(); // Recargar tabla sin recargar página
+                        } else {
+                            $('#canchaModalContent').html(response);
+                        }
+                    })
+                    .fail(function () {
+                        alert('Error al enviar el formulario');
+                    });
+            });
+
+            // Inicializar paginación al cargar la página
+            cargarTabla(); // Cargar tabla inicial al cargar documento
+        });
 
     </script>
-
 }
-
