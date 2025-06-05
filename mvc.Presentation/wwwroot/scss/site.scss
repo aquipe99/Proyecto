@@ -326,6 +326,15 @@ $utilities: map-merge($utilities, ( "padding-bottom": ( responsive: true, proper
     background: $eds-color-white-50 !important;
 
 }
+
+.active-link .icon-color {
+    color: $eds-color-primary-blue-500 !important;
+}
+.active-link {
+    background: #CCE5FF !important;
+    color: #0056b3 !important;
+    font-weight: bold;
+}
 .table-background {
     background: $eds-color-gray-50;
 }
@@ -359,6 +368,7 @@ $utilities: map-merge($utilities, ( "padding-bottom": ( responsive: true, proper
     border-radius: var(--bs-modal-border-radius);
     outline: 0;
 }
+
 .body-login {
     html, body {
         margin: 0;
