@@ -10,7 +10,7 @@ namespace SR.ServiceClient.SCCancha
 {
     public interface ICanchaClient
     {
-        bool ValidarCanchaNombre(string nombre);
+        bool ValidarCanchaNombre(string nombre,int Id);
         Cancha ObtenerCanchaPorId(int Id);
         bool GuardarCancha(Cancha cancha);
         ObservableCollection<Cancha> ObtenerListaCanchas(int page, int pageSize,string buscar);

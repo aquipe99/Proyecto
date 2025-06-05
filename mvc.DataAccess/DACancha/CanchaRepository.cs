@@ -125,7 +125,7 @@ namespace SR.DataAccess.DACancha
 
         }
 
-        public bool ValidarCanchaNombre(string nombre)
+        public bool ValidarCanchaNombre(string nombre, int Id)
         {
             try
             {
@@ -135,7 +135,8 @@ namespace SR.DataAccess.DACancha
                     CommandType = CommandType.StoredProcedure
                 };               
                 command.Parameters.Add("@NOMBRE", SqlDbType.NVarChar, 20).Value = nombre;
-            
+                command.Parameters.Add("@ID", SqlDbType.Int,4).Value = Id;
+
                 connection.Open();
                 object result = command.ExecuteScalar();
 

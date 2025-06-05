@@ -10,7 +10,7 @@ namespace SR.BusinessLogic.BLCancha
 {
     public interface ICanchaService
     {
-        bool ValidarCanchaNombre(string nombre);
+        bool ValidarCanchaNombre(string nombre, int Id);
         Cancha ObtenerCanchaPorId(int Id);
         bool GuardarCancha(Cancha cancha);
         ObservableCollection<Cancha> ObtenerListaCanchas(int page, int pageSize, string buscar);

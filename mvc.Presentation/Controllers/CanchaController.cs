@@ -28,7 +28,7 @@ namespace SR.Presentation.Controllers
         }
         public IActionResult Paginar(int page = 1, int pageSize = 5,string buscar="")
         {
-            var canchas = _canchaClient.ObtenerListaCanchas(page, pageSize,buscar);
+           var canchas = _canchaClient.ObtenerListaCanchas(page, pageSize,buscar);
             ViewData["Page"] = page;
             ViewData["PageSize"] = pageSize;
             ViewData["TotalCount"] = (canchas != null && canchas.Any()) ? canchas.First().Total : 0;
@@ -42,7 +42,7 @@ namespace SR.Presentation.Controllers
         public IActionResult Create(CanchaViewModel cancha)
         {
 
-            if (_canchaClient.ValidarCanchaNombre(cancha.Nombre))
+            if (_canchaClient.ValidarCanchaNombre(cancha.Nombre,cancha.Id))
             {
                 ModelState.AddModelError("Nombre", "Ya existe una cancha con ese nombre.");
             }
@@ -76,7 +76,7 @@ namespace SR.Presentation.Controllers
         [HttpPost]
         public IActionResult Edit(CanchaViewModel cancha)
         {
-            if (_canchaClient.ValidarCanchaNombre(cancha.Nombre))
+            if (_canchaClient.ValidarCanchaNombre(cancha.Nombre,cancha.Id))
             {
                 ModelState.AddModelError("Nombre", "Ya existe una cancha con ese nombre.");
             }

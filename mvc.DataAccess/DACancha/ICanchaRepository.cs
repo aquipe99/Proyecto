@@ -14,7 +14,7 @@ namespace SR.DataAccess.DACancha
         ObservableCollection<Cancha> ObtenerListaCanchas(int page, int pageSize, string buscar);
         bool GuardarCancha(Cancha cancha);
 
-        bool ValidarCanchaNombre(string nombre);
+        bool ValidarCanchaNombre(string nombre, int Id);
         Cancha ObtenerCanchaPorId(int Id);
         bool EliminarCanchaPorId(int Id);
     }

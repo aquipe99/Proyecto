@@ -67,11 +67,11 @@ namespace SR.BusinessLogic.BLCancha
             }
         }
 
-        public bool ValidarCanchaNombre(string nombre)
+        public bool ValidarCanchaNombre(string nombre, int Id)
         {
             try
             {
-                return _canchaRepository.ValidarCanchaNombre(nombre);
+                return _canchaRepository.ValidarCanchaNombre(nombre,Id);
             }
             catch (Exception ex)
             {

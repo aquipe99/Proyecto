@@ -67,11 +67,11 @@ namespace SR.ServiceClient.SCCancha
             }
         }
 
-        public bool ValidarCanchaNombre(string nombre)
+        public bool ValidarCanchaNombre(string nombre, int Id)
         {
             try
             {
-                return _canchaService.ValidarCanchaNombre(nombre);
+                return _canchaService.ValidarCanchaNombre(nombre,Id);
             }
             catch (Exception ex)
             {
