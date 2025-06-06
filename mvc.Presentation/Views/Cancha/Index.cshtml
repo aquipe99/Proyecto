@@ -8,15 +8,27 @@
 }
 
 <div class="container py-4 table-background-white">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <div class="input-group w-50">
-            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
-            <input type="text" class="form-control border-start-0" placeholder="Buscar por nombre" id="searchBox">
+    <div class="row align-items-center mb-3 g-4">
+        <!-- Input: 100% en móviles, 50% en lg+ -->
+        <div class="col-12 col-lg-6 order-2 order-lg-1">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control border-start-0" placeholder="Buscar por nombre" id="searchBox">
+            </div>
         </div>
-        <button type="button" class="body-01-semibold btn-primary-01" data-bs-toggle="modal" data-bs-target="#canchaModal" data-url="/Cancha/Create">
-            <i class="bi bi-plus-lg"></i> Nueva cancha
-        </button>
+
+        <!-- Botón: ocupa espacio mínimo y va al final -->
+        <div class="col-12 col-lg-auto order-1 order-lg-2 ms-lg-auto d-flex justify-content-end">
+            <button type="button" class="body-01-semibold btn-primary-01 w-70 w-lg-auto"
+                    data-bs-toggle="modal"
+                    data-bs-target="#canchaModal"
+                    data-url="/Cancha/Create">
+                <i class="bi bi-plus-lg"></i> Nueva cancha
+            </button>
+        </div>
     </div>
+
+
     <div class="d-flex align-items-center mb-3">   
         <label for="pageSizeSelect" class="me-2">Mostrar:</label>
         <select id="pageSizeSelect" class="form-select form-select-sm" style="width: auto;">
@@ -34,14 +46,14 @@
         </select>
     </div>
 
-    <div id="tablaCanchas">
+    <div id="tablaCanchas" class="table-responsive">
         @await Html.PartialAsync("_TablaCanchas", Model)
     </div>
 </div>
 
 <!-- Modal -->
 <div class="modal fade" id="canchaModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered modal-md">
         <div class="modal-content" id="canchaModalContent">
             <!-- Contenido dinámico -->
         </div>

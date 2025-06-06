@@ -191,10 +191,20 @@ $utilities: map-merge( $utilities, ( "padding-end": ( responsive: true, property
 $utilities: map-merge( $utilities, ( "padding-top": ( responsive: true, property: padding-top, class: pt, values: $custom-spacers, ) ) );
 $utilities: map-merge($utilities, ( "padding-bottom": ( responsive: true, property: padding-bottom, class: pb, values: $custom-spacers, ) ));
 
+body {
+    padding-bottom: 60px; // deja espacio para el navbar inferior
+}
+
+// Puedes estilizar más la barra inferior
+footer.fixed-bottom {
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
 .icon-color {
     color: $eds-color-gray-100;
 }
-
+.icon-color-footer {
+    color: $eds-color-gray-700;
+}
 .btn-primary-01 {
     display: flex;
     height: 40px;
