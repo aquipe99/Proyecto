@@ -1,0 +1,20 @@
+﻿@model SR.Entities.ViewModels.MetodoPagoViewModel
+
+<form id="metodoPagoForm" asp-action="@(Model.Id == 0 ? "Create" : "Edit")" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title heading-03-bold w-100 text-center">@((Model.Id == 0) ? "Nuevo Metodo Pago" : "Editar Metodo Pago")</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body">
+        <input type="hidden" asp-for="Id" />
+        <div class="mb-3">
+            <label asp-for="Nombre" class="form-label caption-regular"></label>
+            <input asp-for="Nombre" class="form-control body-01-regular" placeholder="Ingrese el nombre" />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn-primary-01">Crear Metodo Pago</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    </div>
+</form>

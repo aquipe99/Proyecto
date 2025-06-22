@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SR.Entities.BaseEntities.CanchaEntities;
 using SR.Entities.ViewModels;
 using SR.ServiceClient.SCCancha;
@@ -7,6 +8,7 @@ using System.Security.Claims;
 
 namespace SR.Presentation.Controllers
 {
+    [Authorize]
     public class CanchaController : Controller
     {
         private readonly ICanchaClient _canchaClient;

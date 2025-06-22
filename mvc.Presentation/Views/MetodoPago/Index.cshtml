@@ -1,35 +1,29 @@
 ﻿@using System.Collections.ObjectModel
-@using SR.Entities.BaseEntities.CanchaEntities
-@model ObservableCollection<Cancha>
+@using SR.Entities.BaseEntities.MetodoPagoEntities
+@model ObservableCollection<MetodoPago>
 @{
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
-    ViewData["Titulo"] = "Cancha";
+    ViewData["Titulo"] = "Metodo de Pago";
     var selectedSize = ViewData["PageSize"] != null ? (int)ViewData["PageSize"] : 5;
 }
-
 <div class="container py-4 table-background-white">
-    <div class="row align-items-center mb-3 g-4">
-        <!-- Input: 100% en móviles, 50% en lg+ -->
+    <div class="row align-items-center mb-3 g-4">       
         <div class="col-12 col-lg-6 order-2 order-lg-1">
             <div class="input-group">
                 <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
                 <input type="text" class="form-control border-start-0" placeholder="Buscar por nombre" id="searchBox">
             </div>
         </div>
-
-        <!-- Botón: ocupa espacio mínimo y va al final -->
         <div class="col-12 col-lg-auto order-1 order-lg-2 ms-lg-auto d-flex justify-content-end">
             <button type="button" class="body-01-semibold btn-primary-01 w-70 w-lg-auto"
                     data-bs-toggle="modal"
-                    data-bs-target="#canchaModal"
-                    data-url="/Cancha/Create">
-                <i class="bi bi-plus-lg"></i> Nueva cancha
+                    data-bs-target="#metodoPagoModal"
+                    data-url="/MetodoPago/Create">
+                <i class="bi bi-plus-lg"></i> Nuevo Metodo de Pago
             </button>
         </div>
     </div>
-
-
-    <div class="d-flex align-items-center mb-3">   
+    <div class="d-flex align-items-center mb-3">
         <label for="pageSizeSelect" class="me-2">Mostrar:</label>
         <select id="pageSizeSelect" class="form-select form-select-sm" style="width: auto;">
             @foreach (var size in new[] { 5, 10, 20 })
@@ -46,15 +40,15 @@
         </select>
     </div>
 
-    <div id="tablaCanchas" class="table-responsive">
-        @await Html.PartialAsync("_TablaCanchas", Model)
+    <div id="tablaMetodoPagos" class="table-responsive">
+        @await Html.PartialAsync("_TablaMedotoPago", Model)
     </div>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="canchaModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="metodoPagoModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md">
-        <div class="modal-content" id="canchaModalContent">
+        <div class="modal-content" id="metodoPagoModalContent">
             <!-- Contenido dinámico -->
         </div>
     </div>
@@ -62,26 +56,23 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script>
-                // Función para cargar la tabla con datos paginados y filtrados
+    <script>   
         function cargarTabla(page = 1, pageSize = 5, search = '') {
-            const url = `/Cancha/Paginar?page=${page}&pageSize=${pageSize}&buscar=${encodeURIComponent(search)}`;
+            const url = `/MetodoPago/Paginar?page=${page}&pageSize=${pageSize}&buscar=${encodeURIComponent(search)}`;
 
             $.ajax({
                 url: url,
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 method: 'GET',
                 success: function (html) {
-                    $('#tablaCanchas').html(html);
-                    inicializarEventosPaginacion(); // Reasignar eventos después de cargar
+                    $('#tablaMetodoPagos').html(html);
+                    inicializarEventosPaginacion(); 
                 },
                 error: function (err) {
                     console.error('Error al cargar la tabla:', err);
                 }
             });
-        }
-
-        // Inicializa eventos de paginación
+        }  
         function inicializarEventosPaginacion() {
             $('.pagination .page-link').off('click').on('click', function (e) {
                 e.preventDefault();
@@ -92,43 +83,31 @@
                     cargarTabla(page, pageSize, search);
                 }
             });
-        }
-
-        // Document ready
+        }   
         $(document).ready(function () {
             const $pageSizeSelect = $('#pageSizeSelect');
-            const $searchBox = $('#searchBox');
-
-            // Evento de cambio de cantidad de elementos por página
+            const $searchBox = $('#searchBox');            
             $pageSizeSelect.on('change', function () {
                 cargarTabla(1, $pageSizeSelect.val(), $searchBox.val());
-            });
-
-            // Evento de búsqueda en vivo
+            });     
             $searchBox.on('input', function () {
                 cargarTabla(1, $pageSizeSelect.val(), $searchBox.val());
             });
-
-            // Abrir modal con contenido remoto desde botón con data-url
-            $('[data-bs-target="#canchaModal"]').on('click', function () {
+            $('[data-bs-target="#metodoPagoModal"]').on('click', function () {
                 const url = $(this).data('url');
                 $.get(url, function (html) {
-                    $('#canchaModalContent').html(html);
+                    $('#metodoPagoModalContent').html(html);
                 });
             });
-
-            // Delegación para abrir modal desde enlaces (clase .open-modal)
             $(document).on('click', '.open-modal', function (e) {
                 e.preventDefault();
                 const url = $(this).attr('href');
                 $.get(url, function (html) {
-                    $('#canchaModalContent').html(html);
-                    new bootstrap.Modal($('#canchaModal')[0]).show();
+                    $('#metodoPagoModalContent').html(html);
+                    new bootstrap.Modal($('#metodoPagoModal')[0]).show();
                 });
             });
-
-            // Delegación para envío de formulario vía AJAX
-            $(document).off('submit', '#canchaForm').on('submit', '#canchaForm', function (e) {
+            $(document).off('submit', '#metodoPagoForm').on('submit', '#metodoPagoForm', function (e) {
                 e.preventDefault();
                 const $form = $(this);
                 const url = $form.attr('action');
@@ -137,44 +116,41 @@
                 $.post(url, data)
                     .done(function (response) {
                         if (typeof response === 'object' && response.success) {
-                            const modal = bootstrap.Modal.getInstance($('#canchaModal')[0]);
+                            const modal = bootstrap.Modal.getInstance($('#metodoPagoModal')[0]);
                             modal.hide();
                             Swal.fire({
                                 icon: 'success',
                                 title: '¡Éxito!',
-                                text: 'La cancha ha sido guardada correctamente.',
+                                text: 'El Metodo de Pago ha sido guardado correctamente.',
                                 timer: 2000,
                                 showConfirmButton: false
                             });
-                            cargarTabla(); // Recargar tabla sin recargar página
+                            cargarTabla(); 
                         } else {
-                            $('#canchaModalContent').html(response);
+                            $('#metodoPagoModalContent').html(response);
                         }
                     })
                     .fail(function () {
                         alert('Error al enviar el formulario');
                     });
             });
-                    // Delegación para envío del formulario de eliminación por AJAX
-            $(document).off('submit', '#deleteCanchaForm').on('submit', '#deleteCanchaForm', function (e) {
+            $(document).off('submit', '#deleteMetodoPagoForm').on('submit', '#deleteMetodoPagoForm', function (e) {
                 e.preventDefault();
-
                 const $form = $(this);
                 const id = $form.find('input[name="id"]').val();
-
-                $.post(`/Cancha/DeleteCancha/${id}`)
+                $.post(`/MetodoPago/DeleteMetodoPago/${id}`)
                     .done(function (response) {
                         if (response.success) {
-                            const modal = bootstrap.Modal.getInstance($('#canchaModal')[0]);
+                            const modal = bootstrap.Modal.getInstance($('#metodoPagoModal')[0]);
                             modal.hide();
                             Swal.fire({
                                 icon: 'success',
                                 title: '¡Eliminado!',
-                                text: 'La cancha ha sido eliminada exitosamente.',
+                                text: 'El Metodo de Pago ha sido eliminada exitosamente.',
                                 timer: 2000,
                                 showConfirmButton: false
                             });
-                            cargarTabla(); // Recargar la tabla actualizada
+                            cargarTabla(); 
                         } else {
                             alert('No se pudo eliminar la cancha.');
                         }
@@ -182,9 +158,8 @@
                     .fail(function () {
                         alert('Error en la solicitud de eliminación.');
                     });
-            });
-            // Inicializar paginación al cargar la página
-            cargarTabla(); // Cargar tabla inicial al cargar documento
+            });   
+            cargarTabla(); 
         });
 
     </script>

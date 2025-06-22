@@ -1,0 +1,17 @@
+﻿@model SR.Entities.ViewModels.MetodoPagoViewModel
+<form id="deleteMetodoPagoForm">
+    <div class="modal-body pt-12 pb-12 p-4">
+        <h5 class="heading-04-semibold">Eliminar permanentemente</h5>
+        <p class="body-02-regular">Está a punto de eliminar <strong>@Model.Nombre</strong>. La eliminación es permanente y no puede deshacerse.</p>
+
+        <div class="d-flex justify-content-end gap-3 mt-4">
+            <button type="button" class="btn-primary-white" data-bs-dismiss="modal">Ahora no</button>
+            <form asp-action="DeleteCancha" asp-controller="Cancha" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn-primary-01">Eliminar</button>
+            </form>
+        </div>
+    </div>
+</form>
+
+
