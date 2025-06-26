@@ -1,4 +1,4 @@
-﻿namespace mvc.Presentation.Extensions
+﻿namespace SR.Presentation.Extensions
 {
     public static class RouteConfigurationExtensions
     {

@@ -1,15 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using mvc.DataAccess.DAUsuario;
-using mvc.Entities.BaseEntities.RolEntities;
-using mvc.Entities.BaseEntities.UsuarioEntities;
+using SR.DataAccess.DAUsuario;
 using SR.Entities.BaseEntities.UsuarioEntities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
-namespace mvc.BusinessLogic.BLUsuario
+namespace SR.BusinessLogic.BLUsuario
 {
     public class UsuarioService : IUsuarioService
     {
@@ -19,7 +13,17 @@ namespace mvc.BusinessLogic.BLUsuario
         {
             _usuarioRepository = usuarioRepository;
         }
-
+        public ObservableCollection<Usuario> ObtenerListaUsuario(int page, int pageSize, string buscar)
+        {
+            try
+            {
+                return _usuarioRepository.ObtenerListaUsuario(page, pageSize, buscar);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
         public Usuario ValidarLogin(string correo, string contrasenia)
         {
             try

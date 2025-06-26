@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace mvc.Entities.ViewModels
+namespace SR.Entities.ViewModels
 {
     public class LoginViewModel
     {

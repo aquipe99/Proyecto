@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using mvc.Entities.ViewModels;
-using mvc.ServiceClient.SCUsuario;
 using SR.Entities.BaseEntities.UsuarioEntities;
+using SR.Entities.ViewModels;
+using SR.ServiceClient.SCUsuario;
 using System.Security.Claims;
 
 namespace mvc.Presentation.Controllers

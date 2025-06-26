@@ -8,8 +8,9 @@ using System.Data.SqlClient;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using mvc.DataAccess.Servicios;
+
 using mvc.Entities.BaseEntities.ProductoEntites;
+using SR.DataAccess.Servicios;
 
 namespace mvc.DataAccess.DAProducto
 {

@@ -17,6 +17,18 @@ namespace SR.BusinessLogic.BLMenu
             _menuRepository = menuRepository;
         }
 
+        public ObservableCollection<Menu> ObtenerListaMenu()
+        {
+            try
+            {
+                return _menuRepository.ObtenerListaMenu();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+
         public ObservableCollection<Menu> ObtenerMenuPorusuario(int id)
         {
             try {

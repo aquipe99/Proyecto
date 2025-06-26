@@ -1,6 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
-using mvc.DataAccess.Servicios;
-using mvc.Entities.BaseEntities.UsuarioEntities;
+using SR.DataAccess.Servicios;
 using SR.Entities.BaseEntities.MenuEntities;
 using System;
 using System.Collections.Generic;
@@ -53,6 +52,36 @@ namespace SR.DataAccess.DAMenu
                 throw new Exception("Error: ", ex);
             }
     
+        }
+        public ObservableCollection<Menu> ObtenerListaMenu()
+        {
+            try
+            {
+                var menus = new ObservableCollection<Menu>();
+                using var connection = new SqlConnection(_connectionString);
+                using var command = new SqlCommand("SP_MENU_SELECT_LISTA", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                connection.Open();
+                using var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var menu = new Menu
+                    {
+                        Id = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                        Descipcion = reader["DESCRIPCION"] != DBNull.Value ? reader["DESCRIPCION"].ToString() : string.Empty
+                    };
+                    menus.Add(menu);
+                }
+                return menus;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+
         }
     }
 }

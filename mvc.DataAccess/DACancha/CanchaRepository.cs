@@ -1,7 +1,6 @@
 ﻿using Azure;
 using Microsoft.Data.SqlClient;
-using mvc.DataAccess.Servicios;
-using mvc.Entities.BaseEntities.UsuarioEntities;
+using SR.DataAccess.Servicios;
 using SR.Entities.BaseEntities.CanchaEntities;
 using SR.Entities.BaseEntities.MenuEntities;
 using System;

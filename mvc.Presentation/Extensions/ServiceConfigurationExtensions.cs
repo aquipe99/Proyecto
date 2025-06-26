@@ -1,20 +1,23 @@
 ﻿using mvc.BusinessLogic.BLProducto;
-using mvc.BusinessLogic.BLUsuario;
+
 using mvc.DataAccess.DAProducto;
-using mvc.DataAccess.DAUsuario;
+
 using mvc.ServiceClient.SCProducto;
-using mvc.ServiceClient.SCUsuario;
+
 using SR.BusinessLogic.BLCancha;
 using SR.BusinessLogic.BLMenu;
 using SR.BusinessLogic.BLMetodoPago;
+using SR.BusinessLogic.BLUsuario;
 using SR.DataAccess.DACancha;
 using SR.DataAccess.DAMenu;
 using SR.DataAccess.DAMetodoPago;
+using SR.DataAccess.DAUsuario;
 using SR.ServiceClient.SCCancha;
 using SR.ServiceClient.SCMenu;
 using SR.ServiceClient.SCMetodoPago;
+using SR.ServiceClient.SCUsuario;
 
-namespace mvc.Presentation.Extensions
+namespace SR.Presentation.Extensions
 {
     public static class ServiceConfigurationExtensions
     {

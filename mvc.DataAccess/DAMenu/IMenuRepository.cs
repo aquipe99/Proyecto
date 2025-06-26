@@ -11,5 +11,6 @@ namespace SR.DataAccess.DAMenu
     public interface IMenuRepository
     {
         ObservableCollection<Menu> ObtenerMenuPorusuario(int id);
+        ObservableCollection<Menu> ObtenerListaMenu();
     }
 }

@@ -11,5 +11,6 @@ namespace SR.BusinessLogic.BLMenu
     public interface IMenuService
     {
         ObservableCollection<Menu> ObtenerMenuPorusuario(int id);
+        ObservableCollection<Menu> ObtenerListaMenu();
     }
 }

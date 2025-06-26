@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace mvc.Entities.BaseEntities.RolEntities
+namespace SR.Entities.BaseEntities.RolEntities
 {
     public class Rol
     {

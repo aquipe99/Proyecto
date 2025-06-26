@@ -1,13 +1,13 @@
-﻿using mvc.BusinessLogic.BLUsuario;
-using mvc.Entities.BaseEntities.UsuarioEntities;
+﻿using SR.BusinessLogic.BLUsuario;
 using SR.Entities.BaseEntities.UsuarioEntities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace mvc.ServiceClient.SCUsuario
+namespace SR.ServiceClient.SCUsuario
 {
     public class UsuarioClient : IUsuarioClient
     {
@@ -17,7 +17,17 @@ namespace mvc.ServiceClient.SCUsuario
         {
             _usuarioservice = usuarioservice;
         }
-
+        public ObservableCollection<Usuario> ObtenerListaUsuario(int page, int pageSize, string buscar)
+        {
+            try
+            {
+                return _usuarioservice.ObtenerListaUsuario(page, pageSize, buscar);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
         public Usuario ValidarLogin(string correo, string contrasenia)
         {
             return _usuarioservice.ValidarLogin(correo, contrasenia);

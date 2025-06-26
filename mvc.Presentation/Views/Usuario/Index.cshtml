@@ -1,0 +1,191 @@
+﻿@using System.Collections.ObjectModel
+@using SR.Entities.BaseEntities.UsuarioEntities
+@model ObservableCollection<Usuario>
+@{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+    ViewData["Titulo"] = "Cancha";
+    var selectedSize = ViewData["PageSize"] != null ? (int)ViewData["PageSize"] : 5;
+}
+
+<div class="container py-4 table-background-white">
+    <div class="row align-items-center mb-3 g-4">
+        <!-- Input: 100% en móviles, 50% en lg+ -->
+        <div class="col-12 col-lg-6 order-2 order-lg-1">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control border-start-0" placeholder="Buscar por nombre" id="searchBox">
+            </div>
+        </div>
+
+        <!-- Botón: ocupa espacio mínimo y va al final -->
+        <div class="col-12 col-lg-auto order-1 order-lg-2 ms-lg-auto d-flex justify-content-end">
+            <button type="button" class="body-01-semibold btn-primary-01 w-70 w-lg-auto"
+                    data-bs-toggle="modal"
+                    data-bs-target="#usuarioModal"
+                    data-url="/Usuario/Create">
+                <i class="bi bi-plus-lg"></i> Nuevo usuario
+            </button>
+        </div>
+    </div>
+
+
+    <div class="d-flex align-items-center mb-3">
+        <label for="pageSizeSelect" class="me-2">Mostrar:</label>
+        <select id="pageSizeSelect" class="form-select form-select-sm" style="width: auto;">
+            @foreach (var size in new[] { 5, 10, 20 })
+            {
+                @if (size == selectedSize)
+                {
+                    <option value="@size" selected>@size</option>
+                }
+                else
+                {
+                    <option value="@size">@size</option>
+                }
+            }
+        </select>
+    </div>
+
+    <div id="tablaUsuarios" class="table-responsive">
+        @await Html.PartialAsync("_TablaUsuarios", Model)
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="usuarioModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content" id="usuarioModalContent">
+            <!-- Contenido dinámico -->
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+                // Función para cargar la tabla con datos paginados y filtrados
+        function cargarTabla(page = 1, pageSize = 5, search = '') {
+            const url = `/Usuario/Paginar?page=${page}&pageSize=${pageSize}&buscar=${encodeURIComponent(search)}`;
+
+            $.ajax({
+                url: url,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                method: 'GET',
+                success: function (html) {
+                    $('#tablaUsuarios').html(html);
+                    inicializarEventosPaginacion(); // Reasignar eventos después de cargar
+                },
+                error: function (err) {
+                    console.error('Error al cargar la tabla:', err);
+                }
+            });
+        }
+
+        // Inicializa eventos de paginación
+        function inicializarEventosPaginacion() {
+            $('.pagination .page-link').off('click').on('click', function (e) {
+                e.preventDefault();
+                const page = $(this).data('page');
+                const pageSize = $('#pageSizeSelect').val();
+                const search = $('#searchBox').val();
+                if (page) {
+                    cargarTabla(page, pageSize, search);
+                }
+            });
+        }
+
+        // Document ready
+        $(document).ready(function () {
+            const $pageSizeSelect = $('#pageSizeSelect');
+            const $searchBox = $('#searchBox');
+
+            // Evento de cambio de cantidad de elementos por página
+            $pageSizeSelect.on('change', function () {
+                cargarTabla(1, $pageSizeSelect.val(), $searchBox.val());
+            });
+
+            // Evento de búsqueda en vivo
+            $searchBox.on('input', function () {
+                cargarTabla(1, $pageSizeSelect.val(), $searchBox.val());
+            });
+
+            // Abrir modal con contenido remoto desde botón con data-url
+            $('[data-bs-target="#usuarioModal"]').on('click', function () {
+                const url = $(this).data('url');
+                $.get(url, function (html) {
+                    $('#usuarioModalContent').html(html);
+                });
+            });
+
+            // Delegación para abrir modal desde enlaces (clase .open-modal)
+            $(document).on('click', '.open-modal', function (e) {
+                e.preventDefault();
+                const url = $(this).attr('href');
+                $.get(url, function (html) {
+                    $('#usuarioModalContent').html(html);
+                    new bootstrap.Modal($('#usuarioModal')[0]).show();
+                });
+            });
+
+            // Delegación para envío de formulario vía AJAX
+            $(document).off('submit', '#usuarioForm').on('submit', '#usuarioForm', function (e) {
+                e.preventDefault();
+                const $form = $(this);
+                const url = $form.attr('action');
+                const data = $form.serialize();
+
+                $.post(url, data)
+                    .done(function (response) {
+                        if (typeof response === 'object' && response.success) {
+                            const modal = bootstrap.Modal.getInstance($('#usuarioModal')[0]);
+                            modal.hide();
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Éxito!',
+                                text: 'La cancha ha sido guardada correctamente.',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            cargarTabla(); // Recargar tabla sin recargar página
+                        } else {
+                            $('#usuarioModalContent').html(response);
+                        }
+                    })
+                    .fail(function () {
+                        alert('Error al enviar el formulario');
+                    });
+            });
+                    // Delegación para envío del formulario de eliminación por AJAX
+            $(document).off('submit', '#deleteusuarioForm').on('submit', '#deleteusuarioForm', function (e) {
+                e.preventDefault();
+
+                const $form = $(this);
+                const id = $form.find('input[name="id"]').val();
+
+                $.post(`/Cancha/DeleteCancha/${id}`)
+                    .done(function (response) {
+                        if (response.success) {
+                            const modal = bootstrap.Modal.getInstance($('#usuarioModal')[0]);
+                            modal.hide();
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Eliminado!',
+                                text: 'La cancha ha sido eliminada exitosamente.',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            cargarTabla(); // Recargar la tabla actualizada
+                        } else {
+                            alert('No se pudo eliminar la cancha.');
+                        }
+                    })
+                    .fail(function () {
+                        alert('Error en la solicitud de eliminación.');
+                    });
+            });
+            // Inicializar paginación al cargar la página
+            cargarTabla(); // Cargar tabla inicial al cargar documento
+        });
+
+    </script>
+}

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using mvc.Entities.BaseEntities.UsuarioEntities;
+using SR.Entities.BaseEntities.UsuarioEntities;
 using System.Security.Claims;
 
 namespace SR.Presentation.ViewComponents

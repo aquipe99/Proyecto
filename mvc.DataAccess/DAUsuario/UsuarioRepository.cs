@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
-using mvc.DataAccess.Servicios;
-using mvc.Entities.BaseEntities.UsuarioEntities;
+using SR.Entities.BaseEntities.UsuarioEntities;
+using SR.Entities.BaseEntities.MetodoPagoEntities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,8 +8,9 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SR.DataAccess.Servicios;
 
-namespace mvc.DataAccess.DAUsuario
+namespace SR.DataAccess.DAUsuario
 {
     public class UsuarioRepository : IUsuarioRepository
     {
@@ -18,6 +19,50 @@ namespace mvc.DataAccess.DAUsuario
         {
 
             _connectionString = connectionService.ConnectionString;
+        }
+        public ObservableCollection<Usuario> ObtenerListaUsuario(int page, int pageSize, string buscar)
+        {
+            try
+            {
+                var usuarios = new ObservableCollection<Usuario>();
+                using var connection = new SqlConnection(_connectionString);
+                using var command = new SqlCommand("SP_USUARIO_SELECT_LISTA", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.Add("@PAGE", SqlDbType.Int, 4).Value = page;
+                command.Parameters.Add("@PAGESIZE", SqlDbType.Int, 4).Value = pageSize;
+                if (string.IsNullOrWhiteSpace(buscar))
+                {
+                    command.Parameters.Add("@BUSCAR", SqlDbType.NVarChar, 20).Value = buscar;
+                }
+                else
+                {
+                    command.Parameters.Add("@BUSCAR", SqlDbType.NVarChar, 20).Value = buscar.Trim();
+                }
+
+                connection.Open();
+                using var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var usuario = new Usuario
+                    {
+                        Id = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                        Nombre = reader["NOMBRE"] != DBNull.Value ? reader["NOMBRE"].ToString() : string.Empty,
+                        Correo = reader["CORREO"] != DBNull.Value ? reader["CORREO"].ToString() : string.Empty,
+                        Telefono = reader["TELEFONO"] != DBNull.Value ? reader["TELEFONO"].ToString() : string.Empty,
+                        Estado_txt = reader["ESTADO"] != DBNull.Value ? reader["ESTADO"].ToString() : string.Empty,
+                        Total = reader["TOTAL"] != DBNull.Value ? Convert.ToInt32(reader["TOTAL"]) : 0,
+                    };
+                    usuarios.Add(usuario);
+                }
+                return usuarios;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
         }
         public Usuario ObtenerPorUsuarioGmail(string gmail)
         {            

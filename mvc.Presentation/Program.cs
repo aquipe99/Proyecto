@@ -1,6 +1,5 @@
-
-using mvc.DataAccess.Servicios;
-using mvc.Presentation.Extensions;
+using SR.DataAccess.Servicios;
+using SR.Presentation.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);

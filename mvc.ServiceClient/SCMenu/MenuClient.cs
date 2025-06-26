@@ -19,6 +19,18 @@ namespace SR.ServiceClient.SCMenu
             _menuService = menuService;
         }
 
+        public ObservableCollection<Menu> ObtenerListaMenu()
+        {
+            try
+            {
+                return _menuService.ObtenerListaMenu();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+
         public ObservableCollection<Menu> ObtenerMenuPorusuario(int id)
         {
             try

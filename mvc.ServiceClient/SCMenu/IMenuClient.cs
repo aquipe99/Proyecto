@@ -11,5 +11,6 @@ namespace SR.ServiceClient.SCMenu
     public interface IMenuClient
     {
        ObservableCollection<Menu> ObtenerMenuPorusuario(int id);
+        ObservableCollection<Menu> ObtenerListaMenu();
     }
 }

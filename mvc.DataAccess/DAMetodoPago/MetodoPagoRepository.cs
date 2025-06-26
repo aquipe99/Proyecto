@@ -1,5 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
-using mvc.DataAccess.Servicios;
+using SR.DataAccess.Servicios;
 using SR.Entities.BaseEntities.CanchaEntities;
 using SR.Entities.BaseEntities.MetodoPagoEntities;
 using System;

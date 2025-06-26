@@ -1,0 +1,60 @@
+﻿@model SR.Entities.ViewModels.UsuarioViewModels
+
+<form id="usuarioForm" asp-action="@(Model.Id == 0 ? "Create" : "Edit")" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title heading-03-bold w-100 text-center">@((Model.Id == 0) ? "Nueva Cancha" : "Editar Cancha")</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body">
+        <input type="hidden" asp-for="Id" />
+        <div class="mb-3">
+            <label asp-for="Nombre" class="form-label caption-regular"></label>
+            <input asp-for="Nombre" class="form-control body-01-regular" placeholder="Ingrese el nombre" />
+            <span asp-validation-for="Nombre" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Telefono" class="form-label caption-regular"></label>
+            <input asp-for="Telefono" class="form-control body-01-regular" placeholder="Ingrese el nro telefono">
+            <span asp-validation-for="Telefono" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Correo" class="form-label caption-regular"></label>
+            <input asp-for="Correo" class="form-control body-01-regular" placeholder="Ingrese un correo">
+            <span asp-validation-for="Correo" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label caption-regular">Contraseña</label>
+            <input asp-for="Contrasenia" class="form-control body-01-regular" placeholder="Ingrese un correo">
+            <span asp-validation-for="Contrasenia" class="text-danger"></span>
+        </div>
+        <div class="form-check form-switch mb-3">
+            <label  class="form-label caption-regular">Administrador</label>
+            <input asp-for="EsAdminitrador" class="form-check-input" type="checkbox" role="switch" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label caption-regular">Permisos / Menús disponibles</label>
+            <div>
+                @foreach (var menu in Model.menus)
+                {
+                    <div class="form-check">
+                        <input type="checkbox"
+                               class="form-check-input"
+                               name="MenuSeleccionados"
+                               value="@menu.Id"
+                        @(Model.MenuSeleccionados.Contains(menu.Id) ? "checked" : "") />
+                        <label class="form-check-label">@menu.Descipcion</label>
+                    </div>
+                }
+            </div>
+            <span asp-validation-for="MenuSeleccionados" class="text-danger"></span>
+        </div>
+        <div class="form-check form-switch mb-3">
+            <label class="form-label caption-regular">Estado</label>
+            <input asp-for="Estado" class="form-check-input" type="checkbox" role="switch" />
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn-primary-01">Crear cancha</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    </div>
+</form>
