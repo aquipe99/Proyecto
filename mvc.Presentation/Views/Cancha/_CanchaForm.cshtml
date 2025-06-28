@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn-primary-01">Crear cancha</button>
+        <button type="submit" class="btn-primary-01">@((Model.Id == 0) ? "Crear Cancha" : "Editar Cancha")</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
     </div>
 </form>

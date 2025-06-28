@@ -13,7 +13,10 @@ namespace SR.DataAccess.DAUsuario
     {
         Usuario ObtenerPorUsuarioGmail(string gmail);
         Usuario BuscarUsuarioPorCorreo(string correo);
-        bool SaveUsaurio(Usuario usuario);
+        bool SaveUsuario(Usuario usuario);
+        Usuario ObtenerUsuarioPorId(int Id);
+        bool ValidarUsuarioCorreo(string correo, int Id);
         ObservableCollection<Usuario> ObtenerListaUsuario(int page, int pageSize, string buscar);
+        bool EliminarUsuarioPorId(int Id);
     }
 }

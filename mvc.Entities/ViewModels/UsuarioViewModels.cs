@@ -1,4 +1,5 @@
-﻿using SR.Entities.BaseEntities.MenuEntities;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using SR.Entities.BaseEntities.MenuEntities;
 using SR.Entities.BaseEntities.RolEntities;
 using SR.Entities.Utils;
 using System;
@@ -22,14 +23,13 @@ namespace SR.Entities.ViewModels
         public string? Telefono { get; set; }
         [Required(ErrorMessage = "El correo es obligatorio.")]
         [EmailAddress(ErrorMessage = "Debe ingresar un correo electrónico válido.")]
-        public string? Correo { get; set; }
-        [Required(ErrorMessage = "La contraseña es obligatoria.")]
-        [MinLength(8, ErrorMessage = "La contraseña debe tener al menos 8 caracteres.")]
-        [MaxLength(8, ErrorMessage = "La contraseña debe tener al menos 8 caracteres.")]
+        public string? Correo { get; set; }       
+        [StringLength(8, MinimumLength = 8, ErrorMessage = "La contraseña debe tener exactamente 8 caracteres.")]
         public string? Contrasenia { get; set; }
         public Rol? Rol_id { get; set; }
-        public Boolean Estado { get; set; } 
-        public ObservableCollection<Menu> menus { get; set; }
+        public Boolean Estado { get; set; }
+        [BindNever]
+        public ObservableCollection<Menu> menus { get; set; } = new ObservableCollection<Menu>();
 
         [RequerirAlMenosUnElemento(ErrorMessage = "Debe seleccionar al menos un permiso.")]
         public List<int> MenuSeleccionados { get; set; } = new();
@@ -39,6 +39,6 @@ namespace SR.Entities.ViewModels
             get => Rol_id?.Id == 1;
             set => Rol_id = new Rol { Id = value ? 1 : 2 };
         }
-        
+
     }
 }

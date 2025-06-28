@@ -58,7 +58,7 @@ namespace SR.Presentation.Controllers
                 MetodoPago model = new MetodoPago();
                 model.Nombre = metodoPago.Nombre;           
                 model.UsuarioModifica = userId;
-                _metodoPagoClient.GuardarMetodoPago(model);
+                bool result= _metodoPagoClient.GuardarMetodoPago(model);
                 return Json(new { success = true });
             }
             return PartialView("_MetodoPagoForm", metodoPago);
@@ -90,7 +90,7 @@ namespace SR.Presentation.Controllers
                 model.Id = metodoPago.Id;
                 model.Nombre = metodoPago.Nombre;               
                 model.UsuarioModifica = userId;
-                _metodoPagoClient.GuardarMetodoPago(model);
+                bool result = _metodoPagoClient.GuardarMetodoPago(model);
                 return Json(new { success = true });
             }
             return PartialView("_MetodoPagoForm", metodoPago);
@@ -110,7 +110,7 @@ namespace SR.Presentation.Controllers
         [HttpPost]
         public IActionResult DeleteMetodoPago(int id)
         {
-            var model = _metodoPagoClient.EliminarMetodoPagoPorId(id);
+            bool result  = _metodoPagoClient.EliminarMetodoPagoPorId(id);
             return Json(new { success = true });
 
         }

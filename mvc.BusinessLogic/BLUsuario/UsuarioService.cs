@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Azure;
+using Microsoft.AspNetCore.Identity;
 using SR.DataAccess.DAUsuario;
+using SR.Entities.BaseEntities.MenuEntities;
 using SR.Entities.BaseEntities.UsuarioEntities;
 using System.Collections.ObjectModel;
+using System.Text.Json;
 
 namespace SR.BusinessLogic.BLUsuario
 {
@@ -13,6 +16,19 @@ namespace SR.BusinessLogic.BLUsuario
         {
             _usuarioRepository = usuarioRepository;
         }
+
+        public bool EliminarUsuarioPorId(int Id)
+        {
+            try
+            {
+                return _usuarioRepository.EliminarUsuarioPorId(Id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+
         public ObservableCollection<Usuario> ObtenerListaUsuario(int page, int pageSize, string buscar)
         {
             try
@@ -24,6 +40,39 @@ namespace SR.BusinessLogic.BLUsuario
                 throw new Exception("Error: ", ex);
             }
         }
+
+        public Usuario ObtenerUsuarioPorId(int Id)
+        {
+            try
+            {
+                return _usuarioRepository.ObtenerUsuarioPorId(Id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+
+        public bool SaveUsuario(Usuario usuario)
+        {
+            try {
+                if (!string.IsNullOrWhiteSpace(usuario.Contrasenia))
+                {
+                    var passwordHasher = new PasswordHasher<Usuario>();
+                    usuario.Contrasenia = passwordHasher.HashPassword(usuario, usuario.Contrasenia);
+                }
+                else {
+                    usuario.Contrasenia = null;
+                }
+                usuario.Permisos = JsonSerializer.Serialize(usuario.MenuSeleccionados.Select(id => new { Menu = id }));
+                bool resul = _usuarioRepository.SaveUsuario(usuario);
+                return resul;
+            }
+            catch (Exception ex) {
+                throw new Exception("Error: ", ex);
+            }
+        }
+
         public Usuario ValidarLogin(string correo, string contrasenia)
         {
             try
@@ -69,9 +118,19 @@ namespace SR.BusinessLogic.BLUsuario
             }
             catch (Exception ex) {
                 throw new Exception("Error: ", ex);
+            } 
+        }
+
+        public bool ValidarUsuarioCorreo(string correo, int Id)
+        {
+            try
+            {
+                return _usuarioRepository.ValidarUsuarioCorreo(correo,Id);
             }
-   
-         
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
         }
     }
 }

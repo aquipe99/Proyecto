@@ -12,5 +12,9 @@ namespace SR.BusinessLogic.BLUsuario
     {
         Usuario ValidarLogin(string correo, string contrasenia);
         ObservableCollection<Usuario> ObtenerListaUsuario(int page, int pageSize, string buscar);
+        bool SaveUsuario(Usuario usuario);
+        Usuario ObtenerUsuarioPorId(int Id);
+        bool ValidarUsuarioCorreo(string correo, int Id);
+        bool EliminarUsuarioPorId(int Id);
     }
 }

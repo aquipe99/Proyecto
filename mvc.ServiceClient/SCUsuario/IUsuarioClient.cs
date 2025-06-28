@@ -12,6 +12,10 @@ namespace SR.ServiceClient.SCUsuario
     public interface IUsuarioClient
     {
         ObservableCollection<Usuario> ObtenerListaUsuario(int page, int pageSize, string buscar);
-        Usuario ValidarLogin(string correo, string contrasenia);      
+        Usuario ValidarLogin(string correo, string contrasenia);
+        bool SaveUsuario(Usuario usuario);
+        Usuario ObtenerUsuarioPorId(int Id);
+        bool ValidarUsuarioCorreo(string correo, int Id);
+        bool EliminarUsuarioPorId(int Id);
     }
 }

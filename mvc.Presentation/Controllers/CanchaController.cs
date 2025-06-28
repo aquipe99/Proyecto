@@ -57,8 +57,8 @@ namespace SR.Presentation.Controllers
                 model.Nombre = cancha.Nombre;
                 model.Descipcion = cancha.Descripcion;
                 model.UsuarioModifica = userId;
-                _canchaClient.GuardarCancha(model);
-                return Json(new { success = true });
+                bool result= _canchaClient.GuardarCancha(model);
+                return Json(new { success = result });
             }
             return PartialView("_CanchaForm", cancha);
         }
@@ -92,8 +92,8 @@ namespace SR.Presentation.Controllers
                 model.Nombre = cancha.Nombre;
                 model.Descipcion = cancha.Descripcion;
                 model.UsuarioModifica = userId;
-                _canchaClient.GuardarCancha(model);
-                return Json(new { success = true });
+                bool result = _canchaClient.GuardarCancha(model);
+                return Json(new { success = result });
             }
             return PartialView("_CanchaForm", cancha);
         }
@@ -112,7 +112,7 @@ namespace SR.Presentation.Controllers
         [HttpPost]
         public IActionResult DeleteCancha(int id)
         {
-            var model = _canchaClient.EliminarCanchaPorId(id);
+            bool result = _canchaClient.EliminarCanchaPorId(id);
             return Json(new { success = true });
 
         }

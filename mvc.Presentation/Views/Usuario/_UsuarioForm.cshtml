@@ -2,7 +2,7 @@
 
 <form id="usuarioForm" asp-action="@(Model.Id == 0 ? "Create" : "Edit")" method="post">
     <div class="modal-header">
-        <h5 class="modal-title heading-03-bold w-100 text-center">@((Model.Id == 0) ? "Nueva Cancha" : "Editar Cancha")</h5>
+        <h5 class="modal-title heading-03-bold w-100 text-center">@((Model.Id == 0) ? "Nuevo Usuario" : "Editar Usuario")</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
     </div>
     <div class="modal-body">
@@ -14,7 +14,7 @@
         </div>
         <div class="mb-3">
             <label asp-for="Telefono" class="form-label caption-regular"></label>
-            <input asp-for="Telefono" class="form-control body-01-regular" placeholder="Ingrese el nro telefono">
+            <input asp-for="Telefono" class="form-control body-01-regular" placeholder="Ingrese el telefono">
             <span asp-validation-for="Telefono" class="text-danger"></span>
         </div>
         <div class="mb-3">
@@ -24,8 +24,12 @@
         </div>
         <div class="mb-3">
             <label class="form-label caption-regular">Contraseña</label>
-            <input asp-for="Contrasenia" class="form-control body-01-regular" placeholder="Ingrese un correo">
+            <input asp-for="Contrasenia" class="form-control body-01-regular" placeholder="Ingrese la contraseña">
             <span asp-validation-for="Contrasenia" class="text-danger"></span>
+            @if (ViewBag.MensajeInfoContrasenia != null)
+            {
+                <div class="form-text text-info">@ViewBag.MensajeInfoContrasenia</div>
+            }
         </div>
         <div class="form-check form-switch mb-3">
             <label  class="form-label caption-regular">Administrador</label>
@@ -33,7 +37,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label caption-regular">Permisos / Menús disponibles</label>
-            <div>
+            <div>               
                 @foreach (var menu in Model.menus)
                 {
                     <div class="form-check">
@@ -54,7 +58,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="submit" class="btn-primary-01">Crear cancha</button>
+        <button type="submit" class="btn-primary-01">@((Model.Id == 0) ? "Crear Usuario" : "Editar Usuario")</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
     </div>
 </form>

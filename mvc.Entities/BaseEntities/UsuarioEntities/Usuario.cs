@@ -25,6 +25,8 @@ namespace SR.Entities.BaseEntities.UsuarioEntities
         public LoginResultado LoginResultado { get; set; }
         public string? RolName { get; set; }
         public string? Titulo { get; set; }
+        public List<int>? MenuSeleccionados { get; set; }
+        public string? Permisos { get; set; }
 
     }
 }
