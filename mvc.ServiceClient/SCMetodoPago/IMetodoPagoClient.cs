@@ -12,9 +12,10 @@ namespace SR.ServiceClient.SCMetodoPago
     {
         ObservableCollection<MetodoPago> ObtenerListaMetodoPago(int page, int pageSize, string buscar);
         bool GuardarMetodoPago(MetodoPago metodoPago);
-
         bool ValidarMetodoPagoNombre(string nombre, int Id);
         MetodoPago ObtenerMetodoPagoPorId(int Id);
         bool EliminarMetodoPagoPorId(int Id);
+        ObservableCollection<MetodoPago> ObtenerTodosLosMetodosPago();
+
     }
 }

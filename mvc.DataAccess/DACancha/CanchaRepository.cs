@@ -168,5 +168,38 @@ namespace SR.DataAccess.DACancha
                 throw new Exception("Error: ", ex);
             }
         }
+
+        public ObservableCollection<Cancha> ObtenerTodasLasCanchas()
+        {
+
+            try
+            {
+                var canchas = new ObservableCollection<Cancha>();
+                using var connection = new SqlConnection(_connectionString);
+                using var command = new SqlCommand("SP_CANCHA_SELECT_CANCHAS", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };        
+
+                connection.Open();
+                using var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var cancha = new Cancha
+                    {
+                        Id = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                        Nombre = reader["NOMBRE"] != DBNull.Value ? reader["NOMBRE"].ToString() : string.Empty
+                    };
+                    canchas.Add(cancha);
+                }
+                return canchas;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+
+        }
     }
 }

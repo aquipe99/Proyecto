@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SR.BusinessLogic.BLMetodoPago
 {
@@ -61,6 +62,18 @@ namespace SR.BusinessLogic.BLMetodoPago
             try
             {
                 return _metodoPagoRepository.ObtenerMetodoPagoPorId(Id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+
+        public ObservableCollection<MetodoPago> ObtenerTodosLosMetodosPago()
+        {
+            try
+            {
+                return _metodoPagoRepository.ObtenerTodosLosMetodosPago();
             }
             catch (Exception ex)
             {

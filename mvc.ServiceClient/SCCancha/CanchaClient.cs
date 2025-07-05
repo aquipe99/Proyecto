@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SR.ServiceClient.SCCancha
 {
@@ -60,6 +61,18 @@ namespace SR.ServiceClient.SCCancha
             try
             {
                 return _canchaService.ObtenerListaCanchas(page, pageSize,buscar);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+
+        public ObservableCollection<Cancha> ObtenerTodasLasCanchas()
+        {
+            try
+            {
+                return _canchaService.ObtenerTodasLasCanchas();
             }
             catch (Exception ex)
             {

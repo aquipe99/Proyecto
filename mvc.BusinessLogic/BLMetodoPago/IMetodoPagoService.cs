@@ -12,7 +12,7 @@ namespace SR.BusinessLogic.BLMetodoPago
     {
         ObservableCollection<MetodoPago> ObtenerListaMetodoPago(int page, int pageSize, string buscar);
         bool GuardarMetodoPago(MetodoPago metodoPago);
-
+        ObservableCollection<MetodoPago> ObtenerTodosLosMetodosPago();
         bool ValidarMetodoPagoNombre(string nombre, int Id);
         MetodoPago ObtenerMetodoPagoPorId(int Id);
         bool EliminarMetodoPagoPorId(int Id);

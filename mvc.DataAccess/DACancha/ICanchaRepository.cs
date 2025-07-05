@@ -12,6 +12,7 @@ namespace SR.DataAccess.DACancha
     public interface ICanchaRepository
     {
         ObservableCollection<Cancha> ObtenerListaCanchas(int page, int pageSize, string buscar);
+        ObservableCollection<Cancha> ObtenerTodasLasCanchas();
         bool GuardarCancha(Cancha cancha);
         bool ValidarCanchaNombre(string nombre, int Id);
         Cancha ObtenerCanchaPorId(int Id);

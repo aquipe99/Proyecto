@@ -66,6 +66,18 @@ namespace SR.ServiceClient.SCMetodoPago
             }
         }
 
+        public ObservableCollection<MetodoPago> ObtenerTodosLosMetodosPago()
+        {
+            try
+            {
+                return _metodoPagoService.ObtenerTodosLosMetodosPago();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+
         public bool ValidarMetodoPagoNombre(string nombre, int Id)
         {
             try

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SR.BusinessLogic.BLCancha
 {
@@ -60,6 +61,18 @@ namespace SR.BusinessLogic.BLCancha
             try
             {
                 return _canchaRepository.ObtenerListaCanchas(page,pageSize,buscar);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+
+        public ObservableCollection<Cancha> ObtenerTodasLasCanchas()
+        {
+            try
+            {
+                return _canchaRepository.ObtenerTodasLasCanchas();
             }
             catch (Exception ex)
             {

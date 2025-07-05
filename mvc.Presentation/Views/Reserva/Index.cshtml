@@ -1,0 +1,239 @@
+﻿@* @using System.Collections.ObjectModel
+@using SR.Entities.BaseEntities.CanchaEntities
+@model ObservableCollection<Cancha> *@
+@{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+    ViewData["Titulo"] = "Reserva";
+}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .controls {
+        text-align: center;
+        margin: 20px;
+    }
+
+    .controls button,
+    .controls input[type="date"] {
+        padding: 8px 12px;
+        margin: 0 5px;
+        font-size: 16px;
+    }
+
+    .calendar-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        max-width: 1200px;
+        margin: 0 auto 40px auto;
+        gap: 10px;
+    }
+
+    .calendar-box {
+        width: 32%;
+        min-width: 300px;
+        box-sizing: border-box;
+    }
+
+    .calendar-box h3 {
+        text-align: center;
+        margin-bottom: 10px;
+        font-size: 20px;
+        color: #333;
+    }
+
+    .calendar {
+        width: 100%;
+    }
+
+    .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .controls button,
+    .controls input[type="date"] {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    
+</style>
+<div class="container py-4 table-background-white">
+    <div class="row align-items-center mb-3 g-4">
+        <div class="col-12 col-lg-6 order-2 order-lg-1">
+            <div class="input-group">
+               
+            </div>
+        </div>
+        <div class="col-12 col-lg-auto order-1 order-lg-2 ms-lg-auto d-flex justify-content-end">
+            <button type="button" class="body-01-semibold btn-primary-01 w-70 w-lg-auto"
+                    data-bs-toggle="modal"
+                    data-bs-target="#reservaModal"
+                    data-url="/Reserva/Create">
+                <i class="bi bi-plus-lg"></i> Nueva reserva
+            </button>
+        </div>
+    </div>
+    <div class="">
+        <button id="prevDay">←</button>
+        <input type="date" id="datePicker" value="2025-06-06">
+        <button id="nextDay">→</button>
+    </div>
+    <div class="calendar-container">
+        <div class="calendar-box">
+            <h3>Cancha 1</h3>
+            <div id="cancha1" class="calendar"></div>
+        </div>
+        <div class="calendar-box">
+            <h3>Cancha 2</h3>
+            <div id="cancha2" class="calendar"></div>
+        </div>
+        <div class="calendar-box">
+            <h3>Cancha 3</h3>
+            <div id="cancha3" class="calendar"></div>
+        </div>
+    </div>
+</div>
+
+<div id="calendar"></div> <!-- Aquí se renderizará el calendario -->
+<!-- Modal -->
+<div class="modal fade" id="reservaModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content" id="reservaModalContent">
+            <!-- Contenido dinámico -->
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <!-- FullCalendar CSS y JS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales/es.global.min.js"></script>
+
+    <!-- CSS de Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- JS de Flatpickr -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>          
+        $(document).ready(function () {
+
+            $('[data-bs-target="#reservaModal"]').on('click', function () {
+                const url = $(this).data('url');
+                $.get(url, function (html) {
+                    $('#reservaModalContent').html(html);
+                     inicializarFlatpickr();
+                      inicializarToggleMontoPagado();
+                });
+            });
+
+            $(document).on('click', '.open-modal', function (e) {
+                e.preventDefault();
+                const url = $(this).attr('href');
+                $.get(url, function (html) {
+                    $('#reservaModalContent').html(html);
+                    new bootstrap.Modal($('#reservaModal')[0]).show();
+                       inicializarFlatpickr();
+                        inicializarToggleMontoPagado();
+                });
+            });
+            $(document).off('submit', '#reservaForm').on('submit', '#reservaForm', function (e) {
+                e.preventDefault();
+                const $form = $(this);
+                const url = $form.attr('action');
+                const data = $form.serialize();
+
+                $.post(url, data)
+                    .done(function (response) {
+                        if (typeof response === 'object' && response.success) {
+                            const modal = bootstrap.Modal.getInstance($('#reservaModal')[0]);
+                            modal.hide();
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Éxito!',
+                                text: 'La Reserva ha sido guardada correctamente.',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            cargarTabla();
+                        } else {
+                            $('#reservaModalContent').html(response);
+                            inicializarFlatpickr();
+                            inicializarToggleMontoPagado();
+                        }
+                    })
+                    .fail(function () {
+                        alert('Error al enviar el formulario');
+                    });
+            });
+
+
+          
+        });
+        function inicializarFlatpickr() {
+          $('#reservaModalContent').find('.flatpickr-time').flatpickr({
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true,
+            minuteIncrement: 15,
+            disableMobile:true
+          });
+        }
+        function inicializarToggleMontoPagado() {
+            const estadoCheckbox = document.getElementById('estadoCheckbox');
+            const montoPagadoDiv = document.getElementById('montoPagadoDiv');
+            const montoPagadoInput = document.getElementById('MontoPagado');
+            const montoTotalInput = document.getElementById('MontoTotal');
+            const montoPorCobrarSpan = document.getElementById('montoPorCobrar');
+            const montoLabel = document.getElementById('montoLabel');
+
+            if (!estadoCheckbox || !montoPagadoDiv) return;
+
+            function toggleMontoPagado() {
+                if (estadoCheckbox.checked) {
+                    montoPagadoDiv.style.display = 'block';
+                } else {
+                    montoPagadoDiv.style.display = 'none';
+                    montoPagadoInput.value = '';
+                }
+                calcularMontoPorCobrar();
+            }
+
+            function calcularMontoPorCobrar() {
+                const total = parseFloat(montoTotalInput.value) || 0;
+                const pagado = estadoCheckbox.checked ? (parseFloat(montoPagadoInput.value) || 0) : 0;
+                const porCobrar = Math.max(total - pagado, 0);
+
+                // Cambia el label según el estado del switch
+                if (estadoCheckbox.checked) {
+                    montoLabel.textContent = "Monto de deuda:";
+                } else {
+                    montoLabel.textContent = "Monto a cobrar:";
+                }
+
+                montoPorCobrarSpan.textContent = `S/ ${porCobrar.toFixed(2)}`;
+            }
+
+            toggleMontoPagado();
+
+            estadoCheckbox.addEventListener('change', toggleMontoPagado);
+            montoPagadoInput.addEventListener('input', calcularMontoPorCobrar);
+            montoTotalInput.addEventListener('input', calcularMontoPorCobrar);
+        }
+
+        
+    </script>
+}

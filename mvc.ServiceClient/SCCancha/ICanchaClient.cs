@@ -15,5 +15,6 @@ namespace SR.ServiceClient.SCCancha
         bool GuardarCancha(Cancha cancha);
         ObservableCollection<Cancha> ObtenerListaCanchas(int page, int pageSize,string buscar);
         bool EliminarCanchaPorId(int Id);
+        ObservableCollection<Cancha> ObtenerTodasLasCanchas();
     }
 }

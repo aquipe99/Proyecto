@@ -18,7 +18,7 @@ namespace SR.Entities.ViewModels
         [Required(ErrorMessage = "El Nombre es obligatorio")]
         [StringLength(20, ErrorMessage = "El Nombre no puede tener más de 20 caracteres")]
         public string? Nombre { get; set; }
-        [Required(ErrorMessage = "El teléfono es obligatorio.")]
+     
         [RegularExpression(@"^(9\d{8}|0\d{1,2}\d{6,7})$", ErrorMessage = "Debe ingresar un número válido de teléfono.")]
         public string? Telefono { get; set; }
         [Required(ErrorMessage = "El correo es obligatorio.")]

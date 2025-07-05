@@ -213,7 +213,7 @@ namespace SR.DataAccess.DAUsuario
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-                command.Parameters.Add("@NOMBRE", SqlDbType.NVarChar, 100).Value = correo;
+                command.Parameters.Add("@CORREO", SqlDbType.NVarChar, 100).Value = correo;
                 command.Parameters.Add("@ID", SqlDbType.Int, 4).Value = Id;
 
                 connection.Open();

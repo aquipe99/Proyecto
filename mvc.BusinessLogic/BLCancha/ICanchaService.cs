@@ -15,5 +15,6 @@ namespace SR.BusinessLogic.BLCancha
         bool GuardarCancha(Cancha cancha);
         ObservableCollection<Cancha> ObtenerListaCanchas(int page, int pageSize, string buscar);
         bool EliminarCanchaPorId(int Id);
+        ObservableCollection<Cancha> ObtenerTodasLasCanchas();
     }
 }

@@ -1,0 +1,94 @@
+﻿@model SR.Entities.ViewModels.ReservaViewModel
+
+<form id="reservaForm" asp-action="@(Model.Id == 0 ? "Create" : "Edit")" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title heading-03-bold w-100 text-center">@((Model.Id == 0) ? "Nueva Reserva" : "Editar Reserva")</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body">
+        <input type="hidden" asp-for="Id" />
+        <div class="mb-3">
+            <label asp-for="NombreCliente" class="form-label caption-regular"></label>
+            <input asp-for="NombreCliente" class="form-control body-01-regular" placeholder="Ingrese el nombre" />
+            <span asp-validation-for="NombreCliente" class="text-danger"></span>
+        </div>  
+        <div class="mb-3">
+            <label asp-for="Fecha" class="form-label caption-regular"></label>
+            <input asp-for="Fecha" class="form-control body-01-regular" type="date" />
+            <span asp-validation-for="Fecha" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label caption-regular">Hora Inicio</label>
+                <input asp-for="HoraInicio"
+                       type="text"
+                       class="form-control flatpickr-time"
+                       placeholder="hh:mm" />
+                <span asp-validation-for="HoraInicio" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label caption-regular">Hora Fin</label>
+                <input asp-for="HoraFin"
+                       type="text"
+                       class="form-control flatpickr-time"
+                       placeholder="hh:mm" />
+                <span asp-validation-for="HoraFin" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label  class="form-label caption-regular">Cancha</label>
+            <select asp-for="CanchaId" asp-items="ViewBag.Canchas" class="form-control body-01-regular">
+                <option value="">Seleccione una cancha</option>
+            </select>
+            <span asp-validation-for="CanchaId" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Telefono" class="form-label caption-regular"></label>
+            <input asp-for="Telefono" class="form-control body-01-regular" placeholder="Ingrese el teléfono" />
+            <span asp-validation-for="Telefono" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label  class="form-label caption-regular">Monto Total</label>
+            <input asp-for="MontoTotal" type="number" step="1" min="0" class="form-control body-01-regular" />
+            <span asp-validation-for="MontoTotal" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label caption-regular">Metodo de Pago</label>
+            <div>
+                @foreach (SelectListItem metodo in ViewBag.MetodoPagos)
+                {
+                    <div class="form-check">
+                        <input class="form-check-input"
+                               type="radio"
+                               asp-for="MetodoPagoId"
+                               value="@metodo.Value"
+                               id="metodoPago_@metodo.Value" />
+                        <label class="form-check-label" for="metodoPago_@metodo.Value">
+                            @metodo.Text
+                        </label>
+                    </div>
+                }
+            </div>
+            <span asp-validation-for="MetodoPagoId" class="text-danger"></span>
+        </div>
+        <div class="form-check form-switch mb-3">
+            <label class="form-label caption-regular">Adelanto</label>
+            <input asp-for="Estado" id="estadoCheckbox"  class="form-check-input" type="checkbox" role="switch" />
+        </div>
+        <div class="mb-3" id="montoPagadoDiv">
+            <label class="form-label caption-regular">Monto de adelanto</label>
+            <input asp-for="MontoPagado" type="number" step="1" min="0" class="form-control body-01-regular" />
+            <span asp-validation-for="MontoPagado" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="me-auto d-flex align-items-center">
+            <span class="me-2 fw-bold" id="montoLabel">Monto a cobrar: </span>
+            <span id="montoPorCobrar" class="fw-bold text-primary">S/ 0</span>
+        </div>
+        <button type="submit" class="btn-primary-01">@((Model.Id == 0) ? "Nueva Reserva" : "Editar Reserva")</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+    </div>
+</form>

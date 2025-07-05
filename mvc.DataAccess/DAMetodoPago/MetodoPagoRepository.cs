@@ -157,5 +157,36 @@ namespace SR.DataAccess.DAMetodoPago
             }
         }
 
+        public ObservableCollection<MetodoPago> ObtenerTodosLosMetodosPago()
+        {
+            try
+            {
+                var metodoPagos = new ObservableCollection<MetodoPago>();
+                using var connection = new SqlConnection(_connectionString);
+                using var command = new SqlCommand("SP_METODO_PAGO_SELECT_METODOPAGO", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };                
+
+                connection.Open();
+                using var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var metodoPago = new MetodoPago
+                    {
+                        Id = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                        Nombre = reader["NOMBRE"] != DBNull.Value ? reader["NOMBRE"].ToString() : string.Empty                      
+                    };
+                    metodoPagos.Add(metodoPago);
+                }
+                return metodoPagos;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+
     }
 }
