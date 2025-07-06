@@ -1,6 +1,6 @@
-﻿@* @using System.Collections.ObjectModel
+﻿@using System.Collections.ObjectModel
 @using SR.Entities.BaseEntities.CanchaEntities
-@model ObservableCollection<Cancha> *@
+@model ObservableCollection<Cancha> 
 @{
     Layout = "~/Views/Shared/_LayoutHome.cshtml";
     ViewData["Titulo"] = "Reserva";
@@ -91,18 +91,13 @@
         <button id="nextDay">→</button>
     </div>
     <div class="calendar-container">
-        <div class="calendar-box">
-            <h3>Cancha 1</h3>
-            <div id="cancha1" class="calendar"></div>
-        </div>
-        <div class="calendar-box">
-            <h3>Cancha 2</h3>
-            <div id="cancha2" class="calendar"></div>
-        </div>
-        <div class="calendar-box">
-            <h3>Cancha 3</h3>
-            <div id="cancha3" class="calendar"></div>
-        </div>
+        @foreach (var cancha in Model)
+        {
+            <div class="calendar-box">
+                <h3>@cancha.Nombre</h3>
+                <div id="@cancha.Id" class="calendar"></div>
+            </div>
+        }
     </div>
 </div>
 
@@ -127,8 +122,36 @@
     <!-- JS de Flatpickr -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-    <script>          
+    <script>        
+        let calendars = {};
+
         $(document).ready(function () {
+
+            const localToday  = new Date();
+            const yyyy = localToday.getFullYear();
+            const mm = String(localToday.getMonth() + 1).padStart(2, '0');
+            const dd = String(localToday.getDate()).padStart(2, '0');
+            const today = `${yyyy}-${mm}-${dd}`;
+            $('#datePicker').val(today);          
+            inicializarCalendarios(today);            
+
+            $('#datePicker').on('change', function () {
+                const date = this.value;
+                actualizarCalendarios(date);
+                cargarEventos(date);
+            });
+            $('#prevDay').click(function () {
+                const newDate = moverFecha(-1);
+                $('#datePicker').val(newDate);
+                actualizarCalendarios(newDate);
+                cargarEventos(newDate);
+            });
+            $('#nextDay').click(function () {
+                const newDate = moverFecha(1);
+                $('#datePicker').val(newDate);
+                actualizarCalendarios(newDate);
+                cargarEventos(newDate);
+            });
 
             $('[data-bs-target="#reservaModal"]').on('click', function () {
                 const url = $(this).data('url');
@@ -138,7 +161,6 @@
                       inicializarToggleMontoPagado();
                 });
             });
-
             $(document).on('click', '.open-modal', function (e) {
                 e.preventDefault();
                 const url = $(this).attr('href');
@@ -167,21 +189,107 @@
                                 timer: 2000,
                                 showConfirmButton: false
                             });
-                            cargarTabla();
-                        } else {
+                                const fechaSeleccionada = $('#datePicker').val();
+                                cargarEventos(fechaSeleccionada);
+                        } else if (typeof response === 'object' && !response.success){
+                            Swal.fire({
+                                icon: 'error',
+                                title: '¡Error!',
+                                text: response.message,
+                                timer: 3000,
+                                showConfirmButton: false
+                            });                            
+                        }else{
+
                             $('#reservaModalContent').html(response);
                             inicializarFlatpickr();
                             inicializarToggleMontoPagado();
                         }
                     })
                     .fail(function () {
-                        alert('Error al enviar el formulario');
+                             Swal.fire({
+                                icon: 'error',
+                                title: 'Error del servidor',
+                                text: 'No se pudo procesar la solicitud.',
+                                timer: 3000,
+                                showConfirmButton: false
+                            });
                     });
             });
 
 
           
         });
+        function moverFecha(dias) {
+            const fecha = new Date($('#datePicker').val());
+            fecha.setDate(fecha.getDate() + dias);
+            return fecha.toISOString().split('T')[0];
+        }
+
+        function inicializarCalendarios(fecha) {  
+            $('.calendar').each(function () {
+                const canchaId = $(this).attr('id').replace('cancha', '').toString();
+                const calendarEl = this;  
+                const calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'timeGridDay',
+                    initialDate: fecha,
+                    slotMinTime: '07:00:00',
+                    slotMaxTime: '24:00:00',
+                    height: 'auto',
+                    allDaySlot: false,
+                    headerToolbar: false,
+                    locale: 'es',
+                    events: [],
+                    eventClick: function (info) {
+                        // Solo si es amarillo (deuda)
+                        if (info.event.backgroundColor === 'yellow') {
+                            const idReserva = info.event.extendedProps.idReserva;
+
+                            $.get(`/Reserva/Editar`, { id: idReserva }, function (html) {
+                                $('#reservaModalContent').html(html);
+                                new bootstrap.Modal($('#reservaModal')[0]).show();
+                                inicializarFlatpickr();
+                                inicializarToggleMontoPagado();
+                            });
+                        }
+                    }
+                });
+                calendar.render();
+                calendars[canchaId] = calendar;
+              
+            });
+            cargarEventos(fecha);
+        }
+        function actualizarCalendarios(fecha) {
+           Object.values(calendars).forEach(cal => cal.gotoDate(fecha));
+        }
+        function cargarEventos(fecha) {       
+
+            $.get('/Reserva/ObtenerReservasPorFecha', { fecha })
+                .done(function (data) {    
+                    Object.values(calendars).forEach(cal => cal.removeAllEvents());
+                    data.forEach(r => {
+                        const canchaId = r.canchaId.toString();
+                        
+                        if (calendars[canchaId]) {
+                            calendars[canchaId].addEvent({
+                                title: r.title,
+                                start: r.start,
+                                end: r.end,
+                                backgroundColor: r.backgroundColor,
+                                textColor: r.textColor,
+                                borderColor: r.borderColor,
+                                idReserva: r.idReserva
+                            });
+                        }
+                    });
+                })
+                .fail(function (xhr, status, error) {
+                    console.error("Error al cargar eventos:", status, error);
+                    console.error("Respuesta del servidor:", xhr.responseText);
+                });
+        }
+
         function inicializarFlatpickr() {
           $('#reservaModalContent').find('.flatpickr-time').flatpickr({
             enableTime: true,
@@ -215,20 +323,15 @@
             function calcularMontoPorCobrar() {
                 const total = parseFloat(montoTotalInput.value) || 0;
                 const pagado = estadoCheckbox.checked ? (parseFloat(montoPagadoInput.value) || 0) : 0;
-                const porCobrar = Math.max(total - pagado, 0);
-
-                // Cambia el label según el estado del switch
+                const porCobrar = Math.max(total - pagado, 0);              
                 if (estadoCheckbox.checked) {
                     montoLabel.textContent = "Monto de deuda:";
                 } else {
                     montoLabel.textContent = "Monto a cobrar:";
                 }
-
                 montoPorCobrarSpan.textContent = `S/ ${porCobrar.toFixed(2)}`;
             }
-
             toggleMontoPagado();
-
             estadoCheckbox.addEventListener('change', toggleMontoPagado);
             montoPagadoInput.addEventListener('input', calcularMontoPorCobrar);
             montoTotalInput.addEventListener('input', calcularMontoPorCobrar);

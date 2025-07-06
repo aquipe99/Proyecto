@@ -12,7 +12,7 @@ namespace SR.Entities.BaseEntities.ReservaEntities
 
         public string? NombreCliente { get; set; }
 
-        public DateTime Fecha { get; set; }
+        public DateTime? Fecha { get; set; }
 
         public TimeSpan? HoraInicio { get; set; }
 

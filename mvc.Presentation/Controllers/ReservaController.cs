@@ -6,7 +6,9 @@ using SR.Entities.ViewModels;
 using SR.ServiceClient.SCCancha;
 using SR.ServiceClient.SCMenu;
 using SR.ServiceClient.SCMetodoPago;
+using SR.ServiceClient.SCReserva;
 using SR.ServiceClient.SCUsuario;
+using System.Globalization;
 using System.Reflection;
 using System.Security.Claims;
 
@@ -16,16 +18,50 @@ namespace SR.Presentation.Controllers
     {
         private readonly ICanchaClient _canchaClient; 
         private readonly IMetodoPagoClient _metodoPagoClient;
+        private readonly IReservaClient _reservaClient;
 
-        public ReservaController(ICanchaClient canchaClient, IMetodoPagoClient metodoPagoClient)
+        public ReservaController(IReservaClient reservaClient,ICanchaClient canchaClient, IMetodoPagoClient metodoPagoClient)
         {
             _canchaClient = canchaClient;
             _metodoPagoClient = metodoPagoClient;
+            _reservaClient=reservaClient;
         }
         public IActionResult Index()
         {
-            return View();
+            var canchas = _canchaClient.ObtenerTodasLasCanchas(); 
+            return View(canchas);           
         }
+
+        [HttpGet]
+        public IActionResult ObtenerReservasPorFecha(DateTime fecha)
+        {
+
+            var reservas = _reservaClient.ObtenerReservaPorFecha(fecha);
+
+            var resultado = reservas.Select(r =>
+            {
+                decimal montoTotal = r.MontoTotal ?? 0;
+                decimal montoPagado = r.MontoPagado ?? 0;
+                decimal deuda = montoTotal - montoPagado;
+
+                return new
+                {
+                    idReserva=r.Id,
+                    canchaId = r.CanchaId.ToString(),
+                    title = r.TipoPago == "parcial"
+                        ? $"{r.NombreCliente} (Deuda: S/ {deuda.ToString("0.00", CultureInfo.InvariantCulture)})"
+                        : r.NombreCliente,
+                    start = $"{r.Fecha:yyyy-MM-dd}T{r.HoraInicio:hh\\:mm\\:ss}", // ← Si HoraInicio es TimeSpan
+                    end = $"{r.Fecha:yyyy-MM-dd}T{r.HoraFin:hh\\:mm\\:ss}",     // ← Igual que arriba
+                    backgroundColor = r.TipoPago == "parcial" ? "yellow" : "green",
+                    textColor = r.TipoPago == "parcial" ? "black" : "white",
+                    borderColor = r.TipoPago == "parcial" ? "yellow" : "green"
+                };
+            });
+
+            return Json(resultado);
+        }
+
         public IActionResult Create()
         {
 
@@ -62,6 +98,7 @@ namespace SR.Presentation.Controllers
 
             if (ModelState.IsValid)
             {
+                string mensaje="";
                 var claims = HttpContext.User;
                 var idClaim = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var userId = int.TryParse(idClaim, out var idParsed) ? idParsed : 0;
@@ -74,15 +111,42 @@ namespace SR.Presentation.Controllers
                 model.Telefono = reserva.Telefono;
                 model.MontoTotal = reserva.MontoTotal;
                 model.MetodoPagoId = reserva.MetodoPagoId;
-                model.TipoPago = reserva.Estado == true ? "completo" : "parcial";
+                model.TipoPago = reserva.Estado == true ? "parcial" : "completo";
                 model.MontoPagado = reserva.MontoPagado;
                 model.UsuarioModifica = userId;
-                bool result = _reservaClient.GuardarReserva(model);
-                return Json(new { success = true });
+                bool result = _reservaClient.GuardarReserva(model,out mensaje);
+                return Json(new { success = result, message = mensaje });
             }
             ViewBag.Canchas = new SelectList(reserva.Canchas, "Id", "Nombre");
             ViewBag.MetodoPagos = new SelectList(reserva.MetodoPagos, "Id", "Nombre");
             return PartialView("_ReservaForm", reserva);
+        }
+
+        [HttpGet]
+        public IActionResult Editar(int id)
+        {
+           
+            var model = _reservaClient.ObtenerReservaPorId(id);
+            if (model == null) return NotFound();
+
+            ReservaViewModel reserva = new ReservaViewModel();
+            reserva.Id=model.Id;
+            reserva.NombreCliente = model.NombreCliente;
+            reserva.Fecha = model.Fecha;
+            reserva.HoraInicio = model.HoraInicio;
+            reserva.HoraFin = model.HoraFin;
+            reserva.CanchaId = model.CanchaId;
+            reserva.Telefono = model.Telefono;
+            reserva.MontoTotal = model.MontoTotal;
+            reserva.MetodoPagoId = model.MetodoPagoId;
+            reserva.Estado = model.TipoPago == "parcial" ? true : false;
+            reserva.MontoPagado = model.MontoPagado;
+            reserva.Canchas = _canchaClient.ObtenerTodasLasCanchas();
+            reserva.MetodoPagos = _metodoPagoClient.ObtenerTodosLosMetodosPago();
+            ViewBag.Canchas = new SelectList(reserva.Canchas, "Id", "Nombre");
+            ViewBag.MetodoPagos = new SelectList(reserva.MetodoPagos, "Id", "Nombre");
+            return PartialView("_ReservaForm", reserva);           
+           
         }
     }
 }

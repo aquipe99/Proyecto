@@ -15,8 +15,4 @@
     <ProjectReference Include="..\mvc.Entities\SR.Entities.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="BLReserva\" />
-  </ItemGroup>
-
 </Project>

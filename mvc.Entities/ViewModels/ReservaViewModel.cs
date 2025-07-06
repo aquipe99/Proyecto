@@ -20,7 +20,7 @@ namespace SR.Entities.ViewModels
           
         [Required(ErrorMessage = "La fecha es obligatoria.")]
         [DataType(DataType.Date)]
-        public DateTime Fecha { get; set; }
+        public DateTime? Fecha { get; set; }
 
         [Required(ErrorMessage = "La hora de inicio es obligatoria.")]
         [DataType(DataType.Time)]
