@@ -18,6 +18,18 @@ namespace SR.ServiceClient.SCReserva
             _reservaService = reservaService;
         }
 
+        public bool AnularReservaPorId(int Id)
+        {
+            try
+            {
+                return _reservaService.AnularReservaPorId(Id);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+
         public bool GuardarReserva(Reserva reserva, out string mensaje)
         {
             try

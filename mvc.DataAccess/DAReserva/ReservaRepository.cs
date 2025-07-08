@@ -146,5 +146,28 @@ namespace SR.DataAccess.DAReserva
                 throw new Exception("Error: ", ex);
             }
         }
+        public bool AnularReservaPorId(int Id)
+        {
+            try
+            {
+
+                using var connection = new SqlConnection(_connectionString);
+                using var command = new SqlCommand("SP_RESERVA_SELECT_ANULAR_POR_ID", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.Add("@ID", SqlDbType.Int, 4).Value = Id;
+
+                connection.Open();
+                int result = command.ExecuteNonQuery();
+
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error: ", ex);
+            }
+        }
     }
 }

@@ -35,9 +35,7 @@ namespace SR.Presentation.Controllers
         [HttpGet]
         public IActionResult ObtenerReservasPorFecha(DateTime fecha)
         {
-
             var reservas = _reservaClient.ObtenerReservaPorFecha(fecha);
-
             var resultado = reservas.Select(r =>
             {
                 decimal montoTotal = r.MontoTotal ?? 0;
@@ -51,14 +49,13 @@ namespace SR.Presentation.Controllers
                     title = r.TipoPago == "parcial"
                         ? $"{r.NombreCliente} (Deuda: S/ {deuda.ToString("0.00", CultureInfo.InvariantCulture)})"
                         : r.NombreCliente,
-                    start = $"{r.Fecha:yyyy-MM-dd}T{r.HoraInicio:hh\\:mm\\:ss}", // ← Si HoraInicio es TimeSpan
-                    end = $"{r.Fecha:yyyy-MM-dd}T{r.HoraFin:hh\\:mm\\:ss}",     // ← Igual que arriba
+                    start = $"{r.Fecha:yyyy-MM-dd}T{r.HoraInicio:hh\\:mm\\:ss}", 
+                    end = $"{r.Fecha:yyyy-MM-dd}T{r.HoraFin:hh\\:mm\\:ss}",     
                     backgroundColor = r.TipoPago == "parcial" ? "yellow" : "green",
                     textColor = r.TipoPago == "parcial" ? "black" : "white",
                     borderColor = r.TipoPago == "parcial" ? "yellow" : "green"
                 };
             });
-
             return Json(resultado);
         }
 
@@ -83,18 +80,9 @@ namespace SR.Presentation.Controllers
         {
             reserva.Canchas = _canchaClient.ObtenerTodasLasCanchas();
             reserva.MetodoPagos = _metodoPagoClient.ObtenerTodosLosMetodosPago();
-            if (reserva.Estado) // Solo si quiere adelanto
-            {
-                if (reserva.MontoPagado == null || reserva.MontoPagado <= 0)
-                {
-                    ModelState.AddModelError("MontoPagado", "Debe ingresar un monto de adelanto válido.");
-                }
-
-                if (reserva.MontoPagado > reserva.MontoTotal)
-                {
-                    ModelState.AddModelError("MontoPagado", "El adelanto no puede ser mayor al monto total.");
-                }
-            }
+            ValidarFecha(reserva.Fecha);
+            ValidarHoras(reserva.Fecha, reserva.HoraInicio, reserva.HoraFin);
+            ValidarPago(reserva.Estado, reserva.MontoPagado, reserva.MontoTotal);
 
             if (ModelState.IsValid)
             {
@@ -148,5 +136,99 @@ namespace SR.Presentation.Controllers
             return PartialView("_ReservaForm", reserva);           
            
         }
+
+        [HttpPost]
+        public IActionResult Editar(ReservaViewModel reserva)
+        {
+            reserva.Canchas = _canchaClient.ObtenerTodasLasCanchas();
+            reserva.MetodoPagos = _metodoPagoClient.ObtenerTodosLosMetodosPago();
+            ValidarFecha(reserva.Fecha);
+            ValidarHoras(reserva.Fecha, reserva.HoraInicio, reserva.HoraFin);
+            ValidarPago(reserva.Estado, reserva.MontoPagado, reserva.MontoTotal);
+            if (ModelState.IsValid)
+            {
+                string mensaje = "";
+                var claims = HttpContext.User;
+                var idClaim = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var userId = int.TryParse(idClaim, out var idParsed) ? idParsed : 0;
+                Reserva model = new Reserva();
+                model.Id=reserva.Id;
+                model.NombreCliente = reserva.NombreCliente;
+                model.Fecha = reserva.Fecha;
+                model.HoraInicio = reserva.HoraInicio;
+                model.HoraFin = reserva.HoraFin;
+                model.CanchaId = reserva.CanchaId;
+                model.Telefono = reserva.Telefono;
+                model.MontoTotal = reserva.MontoTotal;
+                model.MetodoPagoId = reserva.MetodoPagoId;
+                model.TipoPago = reserva.Estado == true ? "parcial" : "completo";
+                model.MontoPagado = reserva.MontoPagado;
+                model.UsuarioModifica = userId;
+                bool result = _reservaClient.GuardarReserva(model, out mensaje);
+                return Json(new { success = result });
+            }
+            return PartialView("_ReservaForm", reserva);
+        }
+
+        [HttpPost]
+        public IActionResult Anular(int id)
+        {          
+            bool resultado = _reservaClient.AnularReservaPorId(id);
+            return Json(new { success = true });
+        }
+        private void ValidarFecha(DateTime? fecha)
+        {
+            if (fecha < DateTime.Today)
+            {
+                ModelState.AddModelError("Fecha", "La fecha no puede ser menor a la fecha actual.");
+            }
+        }
+        private void ValidarHoras(DateTime? fecha, TimeSpan? horaInicio, TimeSpan? horaFin)
+        {
+            TimeSpan horaMinima = new TimeSpan(7, 0, 0);
+            TimeSpan horaMaxima = new TimeSpan(23, 0, 0);
+
+            if (horaFin <= horaInicio)
+            {
+                ModelState.AddModelError("HoraFin", "La hora de fin debe ser mayor que la hora de inicio.");
+            }
+
+            if (horaInicio < horaMinima || horaInicio > horaMaxima)
+            {
+                ModelState.AddModelError("HoraInicio", "La hora de inicio debe estar entre las 07:00 y las 23:00.");
+            }
+
+            if (horaFin < horaMinima || horaFin > horaMaxima)
+            {
+                ModelState.AddModelError("HoraFin", "La hora de fin debe estar entre las 07:00 y las 23:00.");
+            }
+
+            if (fecha == DateTime.Today)
+            {
+                var horaActual = DateTime.Now.TimeOfDay;
+                var horaActualConGracia = horaActual.Subtract(TimeSpan.FromMinutes(10)); // Tolerancia de 5 minutos
+
+                if (horaInicio < horaActualConGracia)
+                {
+                    ModelState.AddModelError("HoraInicio", "La hora de inicio debe ser al menos 5 minutos mayor a la hora actual para reservas del mismo día.");
+                }
+            }
+        }
+        private void ValidarPago(bool estado, decimal? montoPagado, decimal? montoTotal)
+        {
+            if (estado)
+            {
+                if (montoPagado == null || montoPagado <= 0)
+                {
+                    ModelState.AddModelError("MontoPagado", "Debe ingresar un monto de adelanto válido.");
+                }
+
+                if (montoPagado > montoTotal)
+                {
+                    ModelState.AddModelError("MontoPagado", "El adelanto no puede ser mayor al monto total.");
+                }
+            }
+        }
+
     }
 }

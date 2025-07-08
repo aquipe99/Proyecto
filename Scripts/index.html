@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reservas por Cancha</title>
+
+  <!-- FullCalendar CSS y JS -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales/es.global.min.js"></script>
+
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    h2 {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .controls {
+      text-align: center;
+      margin: 20px;
+    }
+
+    .controls button,
+    .controls input[type="date"] {
+      padding: 8px 12px;
+      margin: 0 5px;
+      font-size: 16px;
+    }
+
+    .calendar-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      max-width: 1200px;
+      margin: 0 auto 40px auto;
+      gap: 10px;
+    }
+
+    .calendar-box {
+      width: 32%;
+      min-width: 300px;
+      box-sizing: border-box;
+    }
+
+    .calendar-box h3 {
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 20px;
+      color: #333;
+    }
+
+    .calendar {
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .calendar-box {
+        width: 100%;
+      }
+
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .controls button,
+      .controls input[type="date"] {
+        width: 90%;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Reservas por Cancha</h2>
+
+  <div class="controls">
+    <button id="prevDay">← Día anterior</button>
+    <input type="date" id="datePicker" value="2025-06-06">
+    <button id="nextDay">Día siguiente →</button>
+  </div>
+
+  <div class="calendar-container">
+    <div class="calendar-box">
+      <h3>Cancha 1</h3>
+      <div id="cancha1" class="calendar"></div>
+    </div>
+    <div class="calendar-box">
+      <h3>Cancha 2</h3>
+      <div id="cancha2" class="calendar"></div>
+    </div>
+    <div class="calendar-box">
+      <h3>Cancha 3</h3>
+      <div id="cancha3" class="calendar"></div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      let currentDate = '2025-06-06';
+
+      const { Calendar } = FullCalendar;
+
+      const config = {
+        initialView: 'timeGridDay',
+        slotMinTime: '07:00:00',
+        slotMaxTime: '22:00:00',
+        height: 'auto',
+        allDaySlot: false,
+        headerToolbar: false,
+        locale: 'es',
+        slotLabelFormat: {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        }
+      };
+
+      const cancha1 = new Calendar(document.getElementById('cancha1'), {
+        ...config,
+        initialDate: currentDate,
+        events: [
+          { title: 'Carlos', start: '2025-06-06T08:00:00', end: '2025-06-06T09:00:00', backgroundColor: 'yellow', textColor: 'black', borderColor: 'yellow' },
+          { title: 'Ana', start: '2025-06-06T10:00:00', end: '2025-06-06T11:00:00', backgroundColor: 'green', textColor: 'white', borderColor: 'green' },
+          { title: 'Ana', start: '2025-06-06T13:00:00', end: '2025-06-06T14:00:00', backgroundColor: 'green', textColor: 'white', borderColor: 'green' }
+        ]
+      });
+
+      const cancha2 = new Calendar(document.getElementById('cancha2'), {
+        ...config,
+        initialDate: currentDate,
+        events: [
+          { title: 'Reserva', start: '2025-06-06T08:30:00', end: '2025-06-06T09:30:00', backgroundColor: 'green', textColor: 'white', borderColor: 'green' },
+          { title: 'Reserva', start: '2025-06-06T11:00:00', end: '2025-06-06T12:00:00', backgroundColor: 'yellow', textColor: 'black', borderColor: 'yellow' }
+        ]
+      });
+
+      const cancha3 = new Calendar(document.getElementById('cancha3'), {
+        ...config,
+        initialDate: currentDate,
+        events: []
+      });
+
+      cancha1.render();
+      cancha2.render();
+      cancha3.render();
+
+      function updateCalendars(dateStr) {
+        cancha1.gotoDate(dateStr);
+        cancha2.gotoDate(dateStr);
+        cancha3.gotoDate(dateStr);
+        document.getElementById('datePicker').value = dateStr;
+      }
+
+      document.getElementById('datePicker').addEventListener('change', function () {
+        currentDate = this.value;
+        updateCalendars(currentDate);
+      });
+
+      document.getElementById('prevDay').addEventListener('click', function () {
+        const newDate = new Date(currentDate);
+        newDate.setDate(newDate.getDate() - 1);
+        currentDate = newDate.toISOString().split('T')[0];
+        updateCalendars(currentDate);
+      });
+
+      document.getElementById('nextDay').addEventListener('click', function () {
+        const newDate = new Date(currentDate);
+        newDate.setDate(newDate.getDate() + 1);
+        currentDate = newDate.toISOString().split('T')[0];
+        updateCalendars(currentDate);
+      });
+    });
+  </script>
+</body>
+</html>

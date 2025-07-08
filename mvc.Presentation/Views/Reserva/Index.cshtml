@@ -217,6 +217,47 @@
                     });
             });
 
+            $(document).off('click', '#btnAnularReserva').on('click', '#btnAnularReserva', function () {
+                const idReserva = $(this).data('id');
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Esta acción anulará la reserva.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Sí, anular',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.post('/Reserva/Anular', { id: idReserva }, function (response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Reserva anulada',
+                                    text: response.message || 'La reserva fue anulada correctamente.',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                              
+                                const modal = bootstrap.Modal.getInstance($('#reservaModal')[0]);
+                                modal.hide();
+                              
+                                const fechaSeleccionada = $('#datePicker').val();
+                                cargarEventos(fechaSeleccionada);
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: response.message || 'No se pudo anular la reserva.'
+                                });
+                            }
+                        });
+                    }
+            });
+        });
+
+
 
           
         });
@@ -242,7 +283,7 @@
                     events: [],
                     eventClick: function (info) {
                         // Solo si es amarillo (deuda)
-                        if (info.event.backgroundColor === 'yellow') {
+                        if (info.event.backgroundColor === 'yellow' || info.event.backgroundColor === 'green') {
                             const idReserva = info.event.extendedProps.idReserva;
 
                             $.get(`/Reserva/Editar`, { id: idReserva }, function (html) {

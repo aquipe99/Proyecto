@@ -39,7 +39,7 @@ namespace mvc.Presentation.Controllers
                 var identity = new ClaimsIdentity(claims, "CookieAuth");
                 var principal = new ClaimsPrincipal(identity);
                 HttpContext.SignInAsync("CookieAuth", principal).Wait();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Reserva");
             }
             if (usuario.LoginResultado == LoginResultado.UsuarioBloqueado)
             {
