@@ -11,7 +11,7 @@ namespace SR.DataAccess.DAUsuario
 {
     public interface IUsuarioRepository
     {
-        Usuario ObtenerPorUsuarioGmail(string gmail);
+        Usuario ObtenerPorUsuarioGmail(string correo);
         Usuario BuscarUsuarioPorCorreo(string correo);
         bool SaveUsuario(Usuario usuario);
         Usuario ObtenerUsuarioPorId(int Id);

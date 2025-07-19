@@ -1,0 +1,97 @@
+﻿@using System.Collections.ObjectModel
+@using SR.Entities.BaseEntities.CanchaEntities
+@model ObservableCollection<Cancha>
+@{
+    Layout = "~/Views/Shared/_LayoutHome.cshtml";
+    ViewData["Titulo"] = "Ingresos";
+    var selectedSize = ViewData["PageSize"] != null ? (int)ViewData["PageSize"] : 5;
+}
+<div id="resumenTotales" class="mb-3" style="display:none;">
+    <h6>Total de reservas: <span id="totalReservas">0</span></h6>
+    <h6>Monto total: <span id="montoTotal">S/ 0.00</span></h6>
+    <h6>Anulados: <span id="totalAnulados">0</span></h6>
+</div>
+<div class="container py-4 table-background-white">
+    <input type="date" id="fechaInicio">
+    <input type="date" id="fechaFin">
+    <button id="btnFiltrar">Filtrar</button>
+
+    <button class="btnTipo" data-tipo="reservas">Reservas</button>
+    <button class="btnTipo" data-tipo="canchas">Canchas</button>
+
+    <div id="tablaIngresos"></div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        let tipoVista = 'reservas';
+        function cargarTotales() {
+            const inicio = $('#fechaInicio').val();
+            const fin = $('#fechaFin').val();
+            if (tipoVista === 'reservas') {
+                $.get(`/Ingreso/ObtenerTotalesReservas?fechaInicio=${inicio}&fechaFin=${fin}`, function (data) {
+                    $('#totalReservas').text(data.cantidadReservas);
+                    $('#montoTotal').text(`S/ ${parseFloat(data.montoTotal).toFixed(2)}`);
+                    $('#totalAnulados').text(data.cantidadAnulados);
+                    $('#resumenTotales').show(); 
+                });
+            } else if (tipoVista === 'canchas') {
+                $.get(`/Ingreso/ObtenerTotalesCanchas?fechaInicio=${inicio}&fechaFin=${fin}`, function (data) {
+                    $('#totalReservas').text(data.cantidadReservas);
+                    $('#montoTotal').text(`S/ ${parseFloat(data.montoTotal).toFixed(2)}`);
+                    $('#totalAnulados').text('-'); 
+                    $('#resumenTotales').show(); 
+                });
+            }
+        }
+
+        function cargarIngresos() {
+
+            const inicio = $('#fechaInicio').val();
+            const fin = $('#fechaFin').val();
+
+            let url = tipoVista === 'reservas'
+                        ? `/Ingreso/IngresoReservas?fechaInicio=${inicio}&fechaFin=${fin}`
+                        : `/Ingreso/IngresoCanchas?fechaInicio=${inicio}&fechaFin=${fin}`;
+
+
+            $.get(url, function (html) {
+                $('#tablaIngresos').html(html);          
+                    cargarTotales();         
+            });
+        }
+
+        $('#btnFiltrar').on('click', function () {
+            cargarIngresos();
+        });
+
+        $('.btnTipo').on('click', function () {
+            tipoVista = $(this).data('tipo');
+            cargarIngresos();
+        });
+        $(document).ready(function () {
+             const localToday  = new Date();
+            const yyyy = localToday.getFullYear();
+            const mm = String(localToday.getMonth() + 1).padStart(2, '0');
+            const dd = String(localToday.getDate()).padStart(2, '0');
+            const today = `${yyyy}-${mm}-${dd}`;
+            $('#fechaInicio').val(today);
+            $('#fechaFin').val(today);
+
+            cargarIngresos();
+
+            $('#btnFiltrar').on('click', function() {
+                cargarIngresos();
+            });
+
+            $('.btnTipo').on('click', function() {
+                tipoVista = $(this).data('tipo');
+                cargarIngresos();
+            });
+        });
+ 
+    </script>
+}
+

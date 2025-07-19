@@ -169,5 +169,94 @@ namespace SR.DataAccess.DAReserva
                 throw new Exception("Error: ", ex);
             }
         }
+
+        public ObservableCollection<Reserva> ObtenerIngresoReservas(DateTime FechaIni, DateTime FechaFin)
+        {
+            try
+            {
+                var reservas = new ObservableCollection<Reserva>();
+                using var connection = new SqlConnection(_connectionString);
+                using var command = new SqlCommand("SP_RESERVA_SELECT_INGRESOS_RESERVA", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.Add("@FECHAINI", SqlDbType.DateTime, 100).Value = FechaIni;
+                command.Parameters.Add("@FECHAFIN", SqlDbType.DateTime, 100).Value = FechaFin;
+                connection.Open();
+                using var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var reserva = new Reserva
+                    {                     
+                        NombreCliente = reader["NOMBRE_CLIENTE"] != DBNull.Value ? reader["NOMBRE_CLIENTE"].ToString() : string.Empty,
+                        HoraInicio = reader["HORA_INICIO"] != DBNull.Value ? (TimeSpan?)reader["HORA_INICIO"] : null,
+                        HoraFin = reader["HORA_FIN"] != DBNull.Value ? (TimeSpan?)reader["HORA_FIN"] : null,
+                        NombreCancha = reader["NOMBRECANCHA"] != DBNull.Value ? reader["NOMBRECANCHA"].ToString() : string.Empty,
+                        MontoTotal = reader["MONTO_TOTAL"] != DBNull.Value ? (decimal?)reader["MONTO_TOTAL"] : 0,
+                        MontoPagado = reader["MONTO_PAGADO"] != DBNull.Value ? (decimal?)reader["MONTO_PAGADO"] : 0,
+                        TipoPago = reader["TIPO_PAGO"] != DBNull.Value ? reader["TIPO_PAGO"].ToString() : string.Empty,
+                        UsuarioNombre = reader["USUARIONOMBRE"] != DBNull.Value ? reader["USUARIONOMBRE"].ToString() : string.Empty,
+                    };
+                    reservas.Add(reserva);
+                }
+                return reservas;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error: ", ex);
+            }
+        }
+        
+        public ObservableCollection<Reserva> ObtenerMontoPorCancha(DateTime FechaIni, DateTime FechaFin, out int cantidadReservas)
+        {
+            try
+            {
+                cantidadReservas = 0;
+                var reservas = new ObservableCollection<Reserva>();
+                using var connection = new SqlConnection(_connectionString);
+                using var command = new SqlCommand("SP_RESERVA_SELECT_INGRESOS_CANCHA_RESERVA", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+                command.Parameters.Add("@FECHAINI", SqlDbType.DateTime, 100).Value = FechaIni;
+                command.Parameters.Add("@FECHAFIN", SqlDbType.DateTime, 100).Value = FechaFin;
+
+                var outputParam = new SqlParameter("@CANTIDADRESERVAS", SqlDbType.Int)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                command.Parameters.Add(outputParam);
+                connection.Open();
+                using var reader = command.ExecuteReader();
+                {
+                    while (reader.Read())
+                    {
+                        var reserva = new Reserva
+                        {
+                            NombreCancha = reader["NOMBRECANCHA"] != DBNull.Value ? reader["NOMBRECANCHA"].ToString() : string.Empty,
+                            MontoTotal = reader["MONTO_TOTAL"] != DBNull.Value ? (decimal?)reader["MONTO_TOTAL"] : 0
+                        };
+                        reservas.Add(reserva);
+                    }
+                    if (reader.NextResult())
+                    {
+                        while (reader.Read()) { }
+                    }
+                    reader.Close();
+                }
+                if (outputParam.Value != null && outputParam.Value != DBNull.Value)
+                {
+                    cantidadReservas = (int)outputParam.Value;
+                }
+                return reservas;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Error: ", ex);
+            }
+        }
     }
 }

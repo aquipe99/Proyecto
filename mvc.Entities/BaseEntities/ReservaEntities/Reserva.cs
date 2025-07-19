@@ -29,6 +29,8 @@ namespace SR.Entities.BaseEntities.ReservaEntities
         public decimal? MontoPagado { get; set; }
 
         public string? Telefono { get; set; }
+        public string? NombreCancha { get; set; }
+        public string? UsuarioNombre { get; set; }
         public int? UsuarioModifica { get; set; }
     }
 }

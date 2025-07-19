@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SR.Entities.BaseEntities.CanchaEntities;
 using SR.Entities.BaseEntities.ReservaEntities;
@@ -14,6 +15,7 @@ using System.Security.Claims;
 
 namespace SR.Presentation.Controllers
 {
+    [Authorize]
     public class ReservaController : Controller
     {
         private readonly ICanchaClient _canchaClient; 

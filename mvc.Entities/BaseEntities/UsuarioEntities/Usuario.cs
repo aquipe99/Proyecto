@@ -28,5 +28,7 @@ namespace SR.Entities.BaseEntities.UsuarioEntities
         public List<int>? MenuSeleccionados { get; set; }
         public string? Permisos { get; set; }
 
+        
+
     }
 }

@@ -13,6 +13,8 @@ namespace SR.BusinessLogic.BLReserva
         Reserva ObtenerReservaPorId(int Id);
         bool GuardarReserva(Reserva reserva, out string mensaje);
         ObservableCollection<Reserva> ObtenerReservaPorFecha(DateTime Fecha);
+        ObservableCollection<Reserva> ObtenerIngresoReservas(DateTime FechaIni, DateTime FechaFin, out decimal montoTotal, out int cantidadReservas, out int cantidadAnulados);
+        ObservableCollection<Reserva> ObtenerMontoPorCancha(DateTime FechaIni, DateTime FechaFin, out decimal montoTotal, out int cantidadReservas);
         bool AnularReservaPorId(int Id);
     }
 }

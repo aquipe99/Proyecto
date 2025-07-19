@@ -49,6 +49,59 @@ namespace SR.BusinessLogic.BLReserva
             }
         }
 
+        public ObservableCollection<Reserva> ObtenerIngresoReservas(DateTime FechaIni, DateTime FechaFin, out decimal montoTotal, out int cantidadReservas,out int cantidadAnulados)
+        {
+            try
+            {
+                var reservas = _reservaRepository.ObtenerIngresoReservas(FechaIni, FechaFin);
+                montoTotal = 0;
+                cantidadReservas = 0;
+                cantidadAnulados = 0;
+
+                if (reservas != null)
+                {
+                    foreach (var reserva in reservas)
+                    {
+                        var tipo = reserva.TipoPago?.ToLowerInvariant();
+
+                        if (tipo == "completo")
+                        {
+                            montoTotal += reserva.MontoTotal ?? 0;
+                            cantidadReservas++;
+                        }
+                        else if (tipo == "parcial")
+                        {
+                            montoTotal += reserva.MontoPagado ?? 0;
+                            cantidadReservas++;
+                        }
+                        else if (tipo == "anulado")
+                        { 
+                         cantidadAnulados++;
+                        }
+                    }
+                }
+                
+                return reservas;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
+        public ObservableCollection<Reserva> ObtenerMontoPorCancha(DateTime FechaIni, DateTime FechaFin, out decimal montoTotal, out int cantidadReservas)
+        {
+            try
+            {                
+                montoTotal = 0;
+                var reservas = _reservaRepository.ObtenerMontoPorCancha(FechaIni, FechaFin, out cantidadReservas);
+                montoTotal = reservas.Sum(r => r.MontoTotal ?? 0);
+                return reservas;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error: ", ex);
+            }
+        }
         public ObservableCollection<Reserva> ObtenerReservaPorFecha(DateTime Fecha)
         {
             try
