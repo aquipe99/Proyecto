@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SR.ServiceClient.SCReserva;
 
 namespace SR.Presentation.Controllers
 {
+    [Authorize]
     public class IngresoController : Controller
     {
         private readonly IReservaClient _reservaClient;

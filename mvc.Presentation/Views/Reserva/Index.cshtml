@@ -85,10 +85,21 @@
             </button>
         </div>
     </div>
-    <div class="">
-        <button id="prevDay">←</button>
-        <input type="date" id="datePicker" value="2025-06-06">
-        <button id="nextDay">→</button>
+    <div class="row pb-3">
+        <div class="col-md-1 mb-2 align-self-end">
+            <button id="prevDay" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+        </div>
+        <div class="col-md-2 mb-2">
+                <label class="form-label caption-regular">Fecha</label>
+                <input type="date" class="body-01-regular fecha-date form-control" id="datePicker">
+        </div>
+        <div class="col-md-2 mb-2 align-self-end">
+            <button id="nextDay" class="btn btn-outline-primary">
+                <i class="bi bi-arrow-right"></i>
+                </button>
+          </div> 
     </div>
     <div class="calendar-container">
         @foreach (var cancha in Model)

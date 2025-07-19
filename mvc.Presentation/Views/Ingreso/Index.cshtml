@@ -7,17 +7,44 @@
     var selectedSize = ViewData["PageSize"] != null ? (int)ViewData["PageSize"] : 5;
 }
 <div id="resumenTotales" class="mb-3" style="display:none;">
-    <h6>Total de reservas: <span id="totalReservas">0</span></h6>
-    <h6>Monto total: <span id="montoTotal">S/ 0.00</span></h6>
-    <h6>Anulados: <span id="totalAnulados">0</span></h6>
+    <div class="row" >
+        <div class="col-md-3 mb-3 mx-2 info-reporte">
+            <i class="bi bi-bar-chart-line text-primary fs-2"></i>
+            <span id="montoTotal" class="heading-05-semibold">S/ 0.00</span>
+            <p class="body-02-regular">Rentabilidad</p>
+        </div>
+        <div class="col-md-3 mb-3 mx-2 info-reporte">
+            <i class="bi bi-people text-primary fs-2"></i>
+            <span id="totalReservas" class="heading-05-semibold">0</span>
+            <p class="body-02-regular">Reservaciones</p>
+        </div>   
+        <div class="col-md-3 mb-3 mx-2 info-reporte">
+            <i class="bi bi-x-circle text-primary fs-2"></i>
+            <span id="totalAnulados" class="heading-05-semibold">0</span>
+            <p class="body-02-regular">Anulados</p>
+        </div>
+    </div>  
 </div>
 <div class="container py-4 table-background-white">
-    <input type="date" id="fechaInicio">
-    <input type="date" id="fechaFin">
-    <button id="btnFiltrar">Filtrar</button>
-
-    <button class="btnTipo" data-tipo="reservas">Reservas</button>
-    <button class="btnTipo" data-tipo="canchas">Canchas</button>
+    <div class="row pb-3">
+        <div class="col-md-2 mb-2">
+            <label class="form-label caption-regular">Fecha Inicio</label>
+            <input type="date" id="fechaInicio" class="body-01-regular fecha-date form-control">
+        </div>
+        <div class="col-12 col-md-2 mb-2">
+            <label class="form-label caption-regular">Fecha Fin</label>
+            <input type="date" id="fechaFin" class="body-01-regular fecha-date form-control">
+        </div>
+        <div class="col-12 col-md-5 mb-2 align-self-end">
+            <button id="btnFiltrar" class="body-01-semibold btn-primary-01">Filtrar</button>
+        </div> 
+        <div class="col-12 col-md-1 mb-2 align-self-end">
+            <button class="btnTipo tab-reporte  text-color-reporte" data-tipo="reservas">Reservas</button>          
+        </div>
+        <div class="col-12 col-md-1 mb-2 align-self-end">
+            <button class="btnTipo tab-reporte  text-color-reporte" data-tipo="canchas">Canchas</button>
+        </div>        
+    </div> 
 
     <div id="tablaIngresos"></div>
 </div>

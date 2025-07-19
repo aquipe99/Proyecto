@@ -205,6 +205,68 @@ footer.fixed-bottom {
 .icon-color-footer {
     color: $eds-color-gray-700;
 }
+.fecha-date {
+    display: flex;
+    height: 40px;
+    padding: 8px 12px;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+    border-radius: 12px;
+    border: 1px solid #666A91;
+}
+.text-color-reporte {
+    font-family: "Nunito Sans";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 16px; 
+    color: $eds-color-primary-blue-700;
+}
+.tab-reporte {
+    display: flex;
+    height: 28px;
+    padding: 0px var(--Layout-Spacing-03, 12px);
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+
+    &:hover {
+        background: $eds-color-primary-blue-50;
+    }
+}
+.info-reporte {
+    display: flex;
+    width: 150px !important;
+    height: 128px;   
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    border-radius: 14px;
+    background: #FFF;
+}
+.btn-primary-reporte-01 {
+    display: flex;
+    height: 40px;
+    padding: $eds-space-md;
+    justify-content: center;
+    align-items: center;
+    gap: $eds-space-xs;
+    align-self: stretch;
+    border-radius: $eds-radius-sm;
+    background: $eds-color-primary-blue-gradient-default;
+    color: white !important;
+    border: none;
+
+    &:hover {
+        background: $eds-color-primary-blue-gradient-hover;
+    }
+
+    &:active {
+        background: $eds-color-primary-blue-gradient-active;
+    }
+}
 .btn-primary-01 {
     display: flex;
     height: 40px;

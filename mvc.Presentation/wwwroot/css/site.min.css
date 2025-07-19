@@ -35,6 +35,70 @@ footer.fixed-bottom {
   color: #424462;
 }
 
+.fecha-date {
+  display: flex;
+  height: 40px;
+  padding: 8px 12px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 12px;
+  border: 1px solid #666A91;
+}
+
+.text-color-reporte {
+  font-family: "Nunito Sans";
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 16px;
+  color: #145FE1;
+}
+
+.tab-reporte {
+  display: flex;
+  height: 28px;
+  padding: 0px var(--Layout-Spacing-03, 12px);
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+}
+.tab-reporte:hover {
+  background: #EEF8FF;
+}
+
+.info-reporte {
+  display: flex;
+  width: 150px !important;
+  height: 128px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  border-radius: 14px;
+  background: #FFF;
+}
+
+.btn-primary-reporte-01 {
+  display: flex;
+  height: 40px;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: stretch;
+  border-radius: 0.75rem;
+  background: linear-gradient(93deg, #59B5FF 0%, #1B75F5 100%);
+  color: white !important;
+  border: none;
+}
+.btn-primary-reporte-01:hover {
+  background: linear-gradient(93deg, #2990FF 0%, #145FE1 100%);
+}
+.btn-primary-reporte-01:active {
+  background: linear-gradient(93deg, #1B75F5 0%, #174CB6 100%);
+}
+
 .btn-primary-01 {
   display: flex;
   height: 40px;
