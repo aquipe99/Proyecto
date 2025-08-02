@@ -294,7 +294,7 @@
                     events: [],
                     eventClick: function (info) {
                         // Solo si es amarillo (deuda)
-                        if (info.event.backgroundColor === 'yellow' || info.event.backgroundColor === 'green') {
+                        if (info.event.backgroundColor === 'orange' || info.event.backgroundColor === 'green') {
                             const idReserva = info.event.extendedProps.idReserva;
 
                             $.get(`/Reserva/Editar`, { id: idReserva }, function (html) {

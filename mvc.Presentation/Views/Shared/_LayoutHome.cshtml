@@ -47,20 +47,20 @@
     <footer class="d-lg-none fixed-bottom bg-white border-top">
         <div class="d-flex justify-content-around py-2">
             <a href="/Reserva" class="text-center text-decoration-none text-dark">
-                <i class="bi bi-rocket-takeoff fs-5 icon-color-footer"></i><br />
-                <small>Reservas</small>
+                <i class="bi bi-rocket-takeoff fs-5 icon-color-footer @(currentController == "Reserva" ? "active-link " : "text-secondary")"></i><br />
+                <small class="@(currentController == "Reserva" ? "active-link  fw-semibold" : "text-dark")">Reservas</small>
             </a>
             <a href="/Usuario" class="text-center text-decoration-none text-dark">
-                <i class="bi bi-people fs-5 icon-color-footer"></i><br />
-                <small>Usuarios</small>
+                <i class="bi bi-people fs-5 icon-color-footer @(currentController == "Usuario" ? "active-link " : "text-secondary")"></i><br />
+                <small class="@(currentController == "Usuario" ? "active-link  fw-semibold" : "text-dark")">Usuarios</small>               
             </a>
             <a href="/Cancha" class="text-center text-decoration-none text-dark">
                 <i class="bi bi-layers fs-5 icon-color-footer @(currentController == "Cancha" ? "active-link " : "text-secondary")"></i><br />
                 <small class="@(currentController == "Cancha" ? "active-link  fw-semibold" : "text-dark")">Cancha</small>
             </a>
             <a href="/Ingreso" class="text-center text-decoration-none text-dark">
-                <i class="bi bi-bar-chart-line fs-5 icon-color-footer"></i><br />
-                <small class="@(currentController == "Reservas" ? "active-link  fw-semibold" : "text-dark")">Ingresos</small>
+                <i class="bi bi-bar-chart-line fs-5 icon-color-footer @(currentController == "Ingreso" ? "active-link " : "text-secondary")"></i><br />
+                <small class="@(currentController == "Ingreso" ? "active-link  fw-semibold" : "text-dark")">Ingresos</small>
             </a>
         </div>
     </footer>

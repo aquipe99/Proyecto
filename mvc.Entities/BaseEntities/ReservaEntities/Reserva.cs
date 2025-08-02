@@ -31,6 +31,8 @@ namespace SR.Entities.BaseEntities.ReservaEntities
         public string? Telefono { get; set; }
         public string? NombreCancha { get; set; }
         public string? UsuarioNombre { get; set; }
+
+        public string? Estado { get; set; }
         public int? UsuarioModifica { get; set; }
     }
 }

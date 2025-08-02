@@ -53,9 +53,9 @@ namespace SR.Presentation.Controllers
                         : r.NombreCliente,
                     start = $"{r.Fecha:yyyy-MM-dd}T{r.HoraInicio:hh\\:mm\\:ss}", 
                     end = $"{r.Fecha:yyyy-MM-dd}T{r.HoraFin:hh\\:mm\\:ss}",     
-                    backgroundColor = r.TipoPago == "parcial" ? "yellow" : "green",
+                    backgroundColor = r.TipoPago == "parcial" ? "orange" : "green",
                     textColor = r.TipoPago == "parcial" ? "black" : "white",
-                    borderColor = r.TipoPago == "parcial" ? "yellow" : "green"
+                    borderColor = r.TipoPago == "parcial" ? "orange" : "green"
                 };
             });
             return Json(resultado);

@@ -15,7 +15,7 @@ namespace SR.DataAccess.DAReserva
         bool GuardarReserva(Reserva reserva, out string mensaje);
         ObservableCollection<Reserva>ObtenerReservaPorFecha(DateTime Fecha);
         ObservableCollection<Reserva> ObtenerIngresoReservas(DateTime FechaIni, DateTime FechaFin);
-        ObservableCollection<Reserva> ObtenerMontoPorCancha(DateTime FechaIni, DateTime FechaFin,out int ObtenerMontoPorCancha);
+        ObservableCollection<Reserva> ObtenerMontoPorCancha(DateTime FechaIni, DateTime FechaFin,out int cantidadReservas);
         bool AnularReservaPorId(int Id);
     }
 }
