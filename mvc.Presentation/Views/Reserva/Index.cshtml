@@ -124,14 +124,17 @@
 @section Scripts {
     <!-- FullCalendar CSS y JS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+    
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales/es.global.min.js"></script>
+     
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dmuy/MDTimePicker@1.0.2/mdtimepicker.min.css">
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/gh/dmuy/MDTimePicker@1.0.2/mdtimepicker.min.js"></script>
 
-    <!-- CSS de Flatpickr -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
-    <!-- JS de Flatpickr -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 
     <script>        
         let calendars = {};
@@ -168,8 +171,8 @@
                 const url = $(this).data('url');
                 $.get(url, function (html) {
                     $('#reservaModalContent').html(html);
-                     inicializarFlatpickr();
-                      inicializarToggleMontoPagado();
+                    inicializarTimePicker()                   
+                    inicializarToggleMontoPagado();
                 });
             });
             $(document).on('click', '.open-modal', function (e) {
@@ -178,8 +181,8 @@
                 $.get(url, function (html) {
                     $('#reservaModalContent').html(html);
                     new bootstrap.Modal($('#reservaModal')[0]).show();
-                       inicializarFlatpickr();
-                        inicializarToggleMontoPagado();
+                    inicializarTimePicker()                     
+                    inicializarToggleMontoPagado();
                 });
             });
             $(document).off('submit', '#reservaForm').on('submit', '#reservaForm', function (e) {
@@ -213,7 +216,7 @@
                         }else{
 
                             $('#reservaModalContent').html(response);
-                            inicializarFlatpickr();
+                            inicializarTimePicker()                          
                             inicializarToggleMontoPagado();
                         }
                     })
@@ -300,7 +303,7 @@
                             $.get(`/Reserva/Editar`, { id: idReserva }, function (html) {
                                 $('#reservaModalContent').html(html);
                                 new bootstrap.Modal($('#reservaModal')[0]).show();
-                                inicializarFlatpickr();
+                                inicializarTimePicker()                                
                                 inicializarToggleMontoPagado();
                             });
                         }
@@ -341,17 +344,16 @@
                     console.error("Respuesta del servidor:", xhr.responseText);
                 });
         }
-
-        function inicializarFlatpickr() {
-          $('#reservaModalContent').find('.flatpickr-time').flatpickr({
-            enableTime: true,
-            noCalendar: true,
-            dateFormat: "H:i",
-            time_24hr: true,
-            minuteIncrement: 15,
-            disableMobile:true
+        function inicializarTimePicker() {
+          $('#reservaModalContent').find('.flatpickr-time').mdtimepicker({
+            format: 'hh:mm',   
+            theme: 'blue',     
+            hourPadding: true,
+            //readOnly: false,  
+            is24hour: true     
           });
         }
+  
         function inicializarToggleMontoPagado() {
             const estadoCheckbox = document.getElementById('estadoCheckbox');
             const montoPagadoDiv = document.getElementById('montoPagadoDiv');

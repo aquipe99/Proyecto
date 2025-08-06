@@ -25,7 +25,7 @@ namespace SR.BusinessLogic.BLUsuario
             }
             catch (Exception ex)
             {
-                throw new Exception("Error: ", ex);
+                throw;
             }
         }
 
@@ -64,7 +64,7 @@ namespace SR.BusinessLogic.BLUsuario
                 else {
                     usuario.Contrasenia = null;
                 }
-                usuario.Permisos = JsonSerializer.Serialize(usuario.MenuSeleccionados.Select(id => new { Menu = id }));
+                usuario.PermisosJson = JsonSerializer.Serialize(usuario.Permisos.Select(p => new {Menu = p.MenuId }));                
                 bool resul = _usuarioRepository.SaveUsuario(usuario);
                 return resul;
             }

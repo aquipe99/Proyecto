@@ -153,7 +153,7 @@ namespace SR.DataAccess.DAMetodoPago
             catch (Exception ex)
             {
 
-                throw new Exception("Error: ", ex);
+                throw;
             }
         }
 

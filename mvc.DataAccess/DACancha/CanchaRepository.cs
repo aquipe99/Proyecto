@@ -165,7 +165,7 @@ namespace SR.DataAccess.DACancha
             catch (Exception ex)
             {
 
-                throw new Exception("Error: ", ex);
+                throw;
             }
         }
 

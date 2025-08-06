@@ -94,6 +94,7 @@ namespace SR.Presentation.Controllers
                 var userId = int.TryParse(idClaim, out var idParsed) ? idParsed : 0;
                 Reserva model = new Reserva();
                 model.NombreCliente = reserva.NombreCliente;
+                model.DniCliente=reserva.DniCliente;
                 model.Fecha = reserva.Fecha;
                 model.HoraInicio = reserva.HoraInicio;
                 model.HoraFin = reserva.HoraFin;
@@ -156,6 +157,7 @@ namespace SR.Presentation.Controllers
                 Reserva model = new Reserva();
                 model.Id=reserva.Id;
                 model.NombreCliente = reserva.NombreCliente;
+                model.DniCliente = reserva.DniCliente;
                 model.Fecha = reserva.Fecha;
                 model.HoraInicio = reserva.HoraInicio;
                 model.HoraFin = reserva.HoraFin;

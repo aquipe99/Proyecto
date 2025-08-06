@@ -64,17 +64,17 @@ namespace SR.BusinessLogic.BLReserva
                     {
                         var tipo = reserva.TipoPago?.ToLowerInvariant();
 
-                        if (tipo == "completo")
+                        if (tipo == "completo" && reserva.Estado != "anulado")
                         {
                             montoTotal += reserva.MontoTotal ?? 0;
                             cantidadReservas++;
                         }
-                        else if (tipo == "parcial")
+                        else if (tipo == "parcial" && reserva.Estado != "anulado")
                         {
                             montoTotal += reserva.MontoPagado ?? 0;
                             cantidadReservas++;
                         }
-                        else if (tipo == "anulado")
+                        if (reserva.Estado == "anulado")
                         { 
                          cantidadAnulados++;
                         }

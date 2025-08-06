@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SR.Entities.BaseEntities.PermisoEntities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,6 +15,6 @@ namespace SR.Entities.Utils
             var lista = value as IEnumerable<int>;
             return lista != null && lista.Any();
         }
-       
+
     }
 }

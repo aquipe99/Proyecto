@@ -11,6 +11,7 @@
                 <th>Hora Inicio</th>
                 <th>Hora Fin</th>
                 <th>Monto Pagado</th>
+                <th>Tipo de Pago</th>
                 <th>Estado</th>
                 <th>Usuario</th>
             </tr>
@@ -25,8 +26,9 @@
                         <td>@r.NombreCancha</td>
                         <td>@(r.HoraInicio != null ? r.HoraInicio.Value.ToString(@"hh\:mm") : "-")</td>
                         <td>@(r.HoraFin != null ? r.HoraFin.Value.ToString(@"hh\:mm") : "-")</td>
-                        <td>S/ @r.MontoPagado?.ToString("0.00")</td>
+                        <td>S/ @r.MontoTotal?.ToString("0.00")</td>
                         <td>@r.TipoPago</td>
+                        <td>@r.Estado</td>
                         <td>@r.UsuarioNombre</td>
                     </tr>
                 }

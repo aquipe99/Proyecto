@@ -26,7 +26,7 @@ namespace SR.ServiceClient.SCMetodoPago
             }
             catch (Exception ex)
             {
-                throw new Exception("Error: ", ex);
+                throw;
             }
         }
 

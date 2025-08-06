@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using SR.Entities.BaseEntities.CanchaEntities;
 using SR.Entities.BaseEntities.MetodoPagoEntities;
 using SR.Entities.ViewModels;
@@ -110,8 +111,19 @@ namespace SR.Presentation.Controllers
         [HttpPost]
         public IActionResult DeleteMetodoPago(int id)
         {
-            bool result  = _metodoPagoClient.EliminarMetodoPagoPorId(id);
-            return Json(new { success = true });
+            try {
+                bool result = _metodoPagoClient.EliminarMetodoPagoPorId(id);
+                return Json(new { success = true });
+            }     
+             catch (Exception ex)
+            {
+
+                if (ex is SqlException sqlEx && sqlEx.Number == 547)
+                {
+                    return Json(new { success = false, message = "No se puede eliminar el metodo de pago porque tiene reservas asociadas." });
+                }
+                return Json(new { success = false, message = "Error al intentar eliminar el metodo de pago: " + ex.Message });
+            }
 
         }
     }

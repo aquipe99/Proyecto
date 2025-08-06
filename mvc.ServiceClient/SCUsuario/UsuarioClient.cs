@@ -78,7 +78,7 @@ namespace SR.ServiceClient.SCUsuario
             }
             catch (Exception ex)
             {
-                throw new Exception("Error: ", ex);
+                throw;
             }
         }
     }

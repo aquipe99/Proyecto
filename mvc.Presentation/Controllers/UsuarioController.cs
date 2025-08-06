@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using SR.Entities.BaseEntities.CanchaEntities;
+using SR.Entities.BaseEntities.PermisoEntities;
 using SR.Entities.BaseEntities.UsuarioEntities;
 using SR.Entities.ViewModels;
 using SR.ServiceClient.SCMenu;
@@ -73,15 +75,21 @@ namespace SR.Presentation.Controllers
                 var idClaim = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var userId = int.TryParse(idClaim, out var idParsed) ? idParsed : 0;
                 Usuario model = new Usuario();
-                model.Nombre=usuario.Nombre;
-                model.Telefono=usuario.Telefono;
-                model.Correo=usuario.Correo;
-                model.Contrasenia=usuario.Contrasenia;
-                model.Rol_id=usuario.Rol_id;
+                model.Nombre = usuario.Nombre;
+                model.Telefono = usuario.Telefono;
+                model.Correo = usuario.Correo;
+                model.Contrasenia = usuario.Contrasenia;
+                model.Rol_id = usuario.Rol_id;
                 model.UsuarioCrea = userId;
-                model.Estado=usuario.Estado;
-                model.MenuSeleccionados = usuario.MenuSeleccionados;
-                var result= _usuarioClient.SaveUsuario(model);            
+                model.Estado = usuario.Estado;
+                model.Permisos = usuario.MenuSeleccionados
+               .Select(menuId => new Permiso
+               {
+                   MenuId = menuId,   
+                   UsuarioId = model.Id 
+               })
+               .ToList();
+                var result = _usuarioClient.SaveUsuario(model);
                 return Json(new { success = result });
             }
             usuario.menus = _menuClient.ObtenerListaMenu();
@@ -99,7 +107,7 @@ namespace SR.Presentation.Controllers
             usuario.Correo = model.Correo;           
             usuario.Rol_id = model.Rol_id;         
             usuario.Estado = model.Estado.Value;
-            usuario.MenuSeleccionados = new List<int>(model.MenuSeleccionados);
+            usuario.MenuSeleccionados = model.Permisos?.Select(p => p.MenuId).ToList() ?? new List<int>();
             usuario.menus = _menuClient.ObtenerListaMenu();
             return PartialView("_UsuarioForm", usuario);
         }
@@ -131,7 +139,14 @@ namespace SR.Presentation.Controllers
                 model.Rol_id = usuario.Rol_id;
                 model.UsuarioCrea = userId;
                 model.Estado = usuario.Estado;
-                model.MenuSeleccionados = usuario.MenuSeleccionados;
+                model.Permisos = usuario.MenuSeleccionados
+                  .Select(menuId => new Permiso
+                  {
+                      MenuId = menuId,
+                      UsuarioId = model.Id
+                  })
+                  .ToList();
+
                 var result = _usuarioClient.SaveUsuario(model);
                 return Json(new { success = result });
             }
@@ -153,8 +168,28 @@ namespace SR.Presentation.Controllers
         [HttpPost]
         public IActionResult DeleteUsuario(int id)
         {
-            bool result = _usuarioClient.EliminarUsuarioPorId(id);
-            return Json(new { success = result });
+            try {
+                var claims = HttpContext.User;
+                var idClaim = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var userId = int.TryParse(idClaim, out var idParsed) ? idParsed : 0;
+                if (userId == id)
+                {
+                    return Json(new { success = false, message = "No puedes eliminar tu propio usuario." });
+                }
+                bool result = _usuarioClient.EliminarUsuarioPorId(id);
+                return Json(new { success = result });
+            }
+            catch (Exception ex)
+            {
+
+                if (ex is SqlException sqlEx && sqlEx.Number == 547)
+                {
+                    return Json(new { success = false, message = "No se puede eliminar el usuario porque tiene reservas asociadas." });
+                }
+
+                return Json(new { success = false, message = "Error al intentar eliminar el usaurio: " + ex.Message });
+            }
+
 
         }
 

@@ -11,6 +11,7 @@ namespace SR.Entities.BaseEntities.ReservaEntities
         public int Id { get; set; }
 
         public string? NombreCliente { get; set; }
+        public string? DniCliente { get; set; }
 
         public DateTime? Fecha { get; set; }
 

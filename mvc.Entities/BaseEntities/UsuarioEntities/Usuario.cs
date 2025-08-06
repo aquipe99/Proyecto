@@ -1,4 +1,5 @@
-﻿using SR.Entities.BaseEntities.RolEntities;
+﻿using SR.Entities.BaseEntities.PermisoEntities;
+using SR.Entities.BaseEntities.RolEntities;
 using SR.Entities.BaseEntities.UsuarioEntities;
 using System;
 using System.Collections.Generic;
@@ -17,18 +18,16 @@ namespace SR.Entities.BaseEntities.UsuarioEntities
         public string? Contrasenia { get; set; }
         public int Total { get; set; }
         public Rol? Rol_id { get; set; }
-        public int? UsuarioCrea { get; set; }
-        public int? UsuarioModifica { get; set; }
-        public DateTime? FechaModifica { get; set; }
+        public int? UsuarioCrea { get; set; }    
         public Boolean? Estado { get; set; }
         public string? Estado_txt { get; set; }
         public LoginResultado LoginResultado { get; set; }
         public string? RolName { get; set; }
         public string? Titulo { get; set; }
-        public List<int>? MenuSeleccionados { get; set; }
-        public string? Permisos { get; set; }
+        public virtual List<Permiso> Permisos { get; set; } = new List<Permiso>();
+        public string? PermisosJson { get; set; }
 
-        
+
 
     }
 }

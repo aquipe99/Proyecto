@@ -150,11 +150,11 @@
 
                 const $form = $(this);
                 const id = $form.find('input[name="id"]').val();
-
+                 const modal = bootstrap.Modal.getInstance($('#canchaModal')[0]);
                 $.post(`/Cancha/DeleteCancha/${id}`)
                     .done(function (response) {
                         if (response.success) {
-                            const modal = bootstrap.Modal.getInstance($('#canchaModal')[0]);
+                           
                             modal.hide();
                             Swal.fire({
                                 icon: 'success',
@@ -165,11 +165,23 @@
                             });
                             cargarTabla(); 
                         } else {
-                            alert('No se pudo eliminar la cancha.');
+                            modal.hide();
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'No se pudo eliminar',
+                                text: response.message,
+                                timer: 2000,
+                                showConfirmButton: false
+                           });
                         }
+                   
                     })
                     .fail(function () {
-                        alert('Error en la solicitud de eliminación.');
+                             Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error en la solicitud de eliminación',
+                                    showConfirmButton: true
+                                });
                     });
             });         
             cargarTabla(); 

@@ -28,7 +28,7 @@ namespace SR.ServiceClient.SCCancha
             }
             catch (Exception ex)
             {
-                throw new Exception("Error: ", ex);
+                throw; 
             }
         }
 

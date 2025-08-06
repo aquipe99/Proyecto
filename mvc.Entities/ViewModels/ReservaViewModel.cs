@@ -17,7 +17,9 @@ namespace SR.Entities.ViewModels
         [Required(ErrorMessage = "El nombre del cliente es obligatorio.")]
         [StringLength(100, ErrorMessage = "El nombre no puede tener más de 100 caracteres.")]
         public string? NombreCliente { get; set; }
-          
+        [RegularExpression(@"^\d{8}$", ErrorMessage = "El DNI debe tener exactamente 8 dígitos numéricos.")]
+        public string? DniCliente { get; set; }
+
         [Required(ErrorMessage = "La fecha es obligatoria.")]
         [DataType(DataType.Date)]
         public DateTime? Fecha { get; set; }
@@ -50,5 +52,7 @@ namespace SR.Entities.ViewModels
         public ObservableCollection<MetodoPago> MetodoPagos { get; set; } = new();
 
         public Boolean Estado { get; set; }
+        public string HoraInicioStr => HoraInicio.HasValue ? HoraInicio.Value.ToString(@"hh\:mm") : "";
+        public string HoraFinStr => HoraFin.HasValue ? HoraFin.Value.ToString(@"hh\:mm") : "";
     }
 }

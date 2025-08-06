@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using SR.DataAccess.Servicios;
 using SR.Entities.BaseEntities.CanchaEntities;
 using SR.Entities.BaseEntities.RolEntities;
+using SR.Entities.BaseEntities.PermisoEntities;
 
 namespace SR.DataAccess.DAUsuario
 {
@@ -151,7 +152,7 @@ namespace SR.DataAccess.DAUsuario
                 command.Parameters.Add("@ROL_ID", SqlDbType.Int,4).Value = usuario.Rol_id?.Id;
                 command.Parameters.Add("@USUARIO", SqlDbType.Int, 4).Value = usuario.UsuarioCrea;
                 command.Parameters.Add("@ESTADO", SqlDbType.Int, 4).Value = usuario.Estado;
-                command.Parameters.Add("@PERMISO", SqlDbType.NVarChar,255).Value = usuario.Permisos;
+                command.Parameters.Add("@PERMISO", SqlDbType.NVarChar,255).Value = usuario.PermisosJson;
                 connection.Open();               
                 int result = command.ExecuteNonQuery();
 
@@ -182,6 +183,11 @@ namespace SR.DataAccess.DAUsuario
                 {
                     var menus = reader.GetString(reader.GetOrdinal("MENUSELECIONADOS"));
                     var menuIds = menus.Split(',').Select(int.Parse).ToList();
+                    var permisos = menuIds.Select(menuId => new Permiso
+                    {
+                        UsuarioId = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
+                        MenuId = menuId
+                    }).ToList();
                     return new Usuario
                     {
                         Id = reader["ID"] != DBNull.Value ? Convert.ToInt32(reader["ID"]) : 0,
@@ -193,7 +199,7 @@ namespace SR.DataAccess.DAUsuario
                             Id = reader.IsDBNull(reader.GetOrdinal("ROL_ID")) ? 0 : reader.GetInt32(reader.GetOrdinal("ROL_ID"))
                         },
                         Estado = reader["ESTADO"] != DBNull.Value ? Convert.ToBoolean(reader["ESTADO"]) : false,
-                        MenuSeleccionados=menuIds
+                        Permisos = permisos                      
                     };
                 }
                 return null;
@@ -245,7 +251,7 @@ namespace SR.DataAccess.DAUsuario
             catch (Exception ex)
             {
 
-                throw new Exception("Error: ", ex);
+                throw;
             }
         }
 

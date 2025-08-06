@@ -1,10 +1,4 @@
-﻿using mvc.BusinessLogic.BLProducto;
-
-using mvc.DataAccess.DAProducto;
-
-using mvc.ServiceClient.SCProducto;
-
-using SR.BusinessLogic.BLCancha;
+﻿using SR.BusinessLogic.BLCancha;
 using SR.BusinessLogic.BLMenu;
 using SR.BusinessLogic.BLMetodoPago;
 using SR.BusinessLogic.BLReserva;
@@ -26,21 +20,21 @@ namespace SR.Presentation.Extensions
     {
         public static void ConfigureServices(this IServiceCollection services) {         
             //Repositorio
-            services.AddScoped<IProductoRepository, ProductoRespository>();
+         
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IMenuRepository, MenuRepository>();
             services.AddScoped<ICanchaRepository, CanchaRepository>();
             services.AddScoped<IMetodoPagoRepository, MetodoPagoRepository>();
             services.AddScoped<IReservaRepository, ReservaRepository>();
             //service
-            services.AddScoped<IProductoService, ProductoService>();
+           
             services.AddScoped<IUsuarioService,UsuarioService>();
             services.AddScoped<IMenuService, MenuService>();
             services.AddScoped<ICanchaService, CanchaService>();
             services.AddScoped<IMetodoPagoService, MetodoPagoService>();
             services.AddScoped<IReservaService, ReservaService>();
             //client
-            services.AddScoped<IProductoClient, ProductoClient>();
+          
             services.AddScoped<IUsuarioClient, UsuarioClient>();
             services.AddScoped<IMenuClient, MenuClient>();
             services.AddScoped<ICanchaClient, CanchaClient>();

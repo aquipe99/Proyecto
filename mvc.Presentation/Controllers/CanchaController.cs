@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using SR.Entities.BaseEntities.CanchaEntities;
 using SR.Entities.ViewModels;
 using SR.ServiceClient.SCCancha;
@@ -112,8 +113,21 @@ namespace SR.Presentation.Controllers
         [HttpPost]
         public IActionResult DeleteCancha(int id)
         {
-            bool result = _canchaClient.EliminarCanchaPorId(id);
-            return Json(new { success = true });
+            try {
+                bool result = _canchaClient.EliminarCanchaPorId(id);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                
+                if (ex is SqlException sqlEx && sqlEx.Number == 547)
+                {                    
+                    return Json(new { success = false, message = "No se puede eliminar la cancha porque tiene reservas asociadas." });
+                }
+          
+                return Json(new { success = false, message = "Error al intentar eliminar la cancha: " + ex.Message });
+            }
+
 
         }
     }

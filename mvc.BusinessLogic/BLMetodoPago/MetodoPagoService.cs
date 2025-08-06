@@ -29,7 +29,7 @@ namespace SR.BusinessLogic.BLMetodoPago
             }
             catch (Exception ex)
             {
-                throw new Exception("Error: ", ex);
+                throw;
             }
         }
 

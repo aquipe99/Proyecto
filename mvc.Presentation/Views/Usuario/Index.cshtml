@@ -177,10 +177,10 @@
                 e.preventDefault();
                 const $form = $(this);
                 const id = $form.find('input[name="id"]').val();
+                 const modal = bootstrap.Modal.getInstance($('#usuarioModal')[0]);
                 $.post(`/Usuario/DeleteUsuario/${id}`)
                     .done(function (response) {
-                        if (response.success) {
-                            const modal = bootstrap.Modal.getInstance($('#usuarioModal')[0]);
+                        if (response.success) {                           
                             modal.hide();
                             Swal.fire({
                                 icon: 'success',
@@ -191,11 +191,22 @@
                             });
                             cargarTabla(); 
                         } else {
-                            alert('No se pudo eliminar el usuario.');
+                            modal.hide();
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'No se pudo eliminar',
+                                text: response.message,
+                                timer: 2000,
+                                showConfirmButton: false
+                           });
                         }
                     })
                     .fail(function () {
-                        alert('Error en la solicitud de eliminación.');
+                         Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error en la solicitud de eliminación',
+                                    showConfirmButton: true
+                         });
                     });
             });          
             cargarTabla(); 

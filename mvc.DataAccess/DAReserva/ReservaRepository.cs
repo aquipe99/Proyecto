@@ -29,7 +29,8 @@ namespace SR.DataAccess.DAReserva
                     CommandType = CommandType.StoredProcedure
                 };
                 command.Parameters.Add("@Id", SqlDbType.Int, 4).Value = reserva.Id;
-                command.Parameters.Add("@NombreCliente", SqlDbType.NVarChar,50).Value = reserva.NombreCliente;
+                command.Parameters.Add("@NombreCliente", SqlDbType.NVarChar, 50).Value = reserva.NombreCliente;
+                command.Parameters.Add("@DniCliente", SqlDbType.NVarChar,10).Value = reserva.DniCliente;
                 command.Parameters.Add("@Fecha", SqlDbType.DateTime, 100).Value = reserva.Fecha;
                 command.Parameters.Add("@HoraInicio", SqlDbType.Time).Value = reserva.HoraInicio;
                 command.Parameters.Add("@HoraFin", SqlDbType.Time).Value = reserva.HoraFin;
@@ -196,6 +197,7 @@ namespace SR.DataAccess.DAReserva
                         MontoTotal = reader["MONTO_TOTAL"] != DBNull.Value ? (decimal?)reader["MONTO_TOTAL"] : 0,
                         MontoPagado = reader["MONTO_PAGADO"] != DBNull.Value ? (decimal?)reader["MONTO_PAGADO"] : 0,
                         TipoPago = reader["TIPO_PAGO"] != DBNull.Value ? reader["TIPO_PAGO"].ToString() : string.Empty,
+                        Estado = reader["ESTADO"] != DBNull.Value ? reader["ESTADO"].ToString() : string.Empty,
                         UsuarioNombre = reader["USUARIONOMBRE"] != DBNull.Value ? reader["USUARIONOMBRE"].ToString() : string.Empty,
                     };
                     reservas.Add(reserva);

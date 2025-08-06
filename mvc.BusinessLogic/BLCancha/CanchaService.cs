@@ -28,7 +28,7 @@ namespace SR.BusinessLogic.BLCancha
             }
             catch (Exception ex)
             {
-                throw new Exception("Error: ", ex);
+                throw; 
             }
         }
 

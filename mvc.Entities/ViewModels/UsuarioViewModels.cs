@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using SR.Entities.BaseEntities.MenuEntities;
+using SR.Entities.BaseEntities.PermisoEntities;
 using SR.Entities.BaseEntities.RolEntities;
 using SR.Entities.Utils;
 using System;
@@ -30,15 +31,14 @@ namespace SR.Entities.ViewModels
         public Boolean Estado { get; set; }
         [BindNever]
         public ObservableCollection<Menu> menus { get; set; } = new ObservableCollection<Menu>();
-
-        [RequerirAlMenosUnElemento(ErrorMessage = "Debe seleccionar al menos un permiso.")]
-        public List<int> MenuSeleccionados { get; set; } = new();
-
+        
         public bool EsAdminitrador
         {
             get => Rol_id?.Id == 1;
             set => Rol_id = new Rol { Id = value ? 1 : 2 };
         }
-
+        public string? PermisosJson { get; set; }
+        [RequerirAlMenosUnElemento(ErrorMessage = "Debe seleccionar al menos un permiso.")]
+        public List<int> MenuSeleccionados { get; set; } = new();
     }
 }
