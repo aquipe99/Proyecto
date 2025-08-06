@@ -19,6 +19,7 @@ builder.Services.ConfigureServices();
 
 
 var app = builder.Build();
+app.UseStatusCodePagesWithReExecute("/Error404");
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();

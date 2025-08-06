@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using SR.Entities.BaseEntities.CanchaEntities;
 using SR.Entities.BaseEntities.ReservaEntities;
 using SR.Entities.ViewModels;
+using SR.Presentation.Helpers;
 using SR.ServiceClient.SCCancha;
 using SR.ServiceClient.SCMenu;
 using SR.ServiceClient.SCMetodoPago;
@@ -16,6 +17,7 @@ using System.Security.Claims;
 namespace SR.Presentation.Controllers
 {
     [Authorize]
+    [AuthorizeUser]
     public class ReservaController : Controller
     {
         private readonly ICanchaClient _canchaClient; 
@@ -27,7 +29,7 @@ namespace SR.Presentation.Controllers
             _canchaClient = canchaClient;
             _metodoPagoClient = metodoPagoClient;
             _reservaClient=reservaClient;
-        }
+        }      
         public IActionResult Index()
         {
             var canchas = _canchaClient.ObtenerTodasLasCanchas(); 
@@ -60,7 +62,7 @@ namespace SR.Presentation.Controllers
             });
             return Json(resultado);
         }
-
+        
         public IActionResult Create()
         {
 
@@ -112,7 +114,7 @@ namespace SR.Presentation.Controllers
             ViewBag.MetodoPagos = new SelectList(reserva.MetodoPagos, "Id", "Nombre");
             return PartialView("_ReservaForm", reserva);
         }
-
+    
         [HttpGet]
         public IActionResult Editar(int id)
         {
@@ -173,7 +175,7 @@ namespace SR.Presentation.Controllers
             }
             return PartialView("_ReservaForm", reserva);
         }
-
+      
         [HttpPost]
         public IActionResult Anular(int id)
         {          

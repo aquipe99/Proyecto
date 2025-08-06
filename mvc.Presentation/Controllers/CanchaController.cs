@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using SR.Entities.BaseEntities.CanchaEntities;
 using SR.Entities.ViewModels;
+using SR.Presentation.Helpers;
 using SR.ServiceClient.SCCancha;
 using System.Collections.ObjectModel;
 using System.Security.Claims;
@@ -10,13 +11,14 @@ using System.Security.Claims;
 namespace SR.Presentation.Controllers
 {
     [Authorize]
+    [AuthorizeUser]
     public class CanchaController : Controller
     {
         private readonly ICanchaClient _canchaClient;
 
         public CanchaController(ICanchaClient canchaClient) { 
             _canchaClient = canchaClient;
-        }
+        }        
         public IActionResult Index(int page = 1, int pageSize = 5,string buscar="")
         {
             var canchas = _canchaClient.ObtenerListaCanchas(page, pageSize, buscar);
@@ -37,6 +39,7 @@ namespace SR.Presentation.Controllers
             ViewData["TotalCount"] = (canchas != null && canchas.Any()) ? canchas.First().Total : 0;
             return PartialView("_TablaCanchas", new ObservableCollection<Cancha>(canchas));
         }
+     
         public IActionResult Create()
         {
             return PartialView("_CanchaForm", new CanchaViewModel());
@@ -63,6 +66,7 @@ namespace SR.Presentation.Controllers
             }
             return PartialView("_CanchaForm", cancha);
         }
+     
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -99,6 +103,7 @@ namespace SR.Presentation.Controllers
             return PartialView("_CanchaForm", cancha);
         }
 
+      
         [HttpGet]
         public IActionResult Delete(int id)
         {

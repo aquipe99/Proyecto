@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using SR.Entities.BaseEntities.CanchaEntities;
 using SR.Entities.BaseEntities.MetodoPagoEntities;
 using SR.Entities.ViewModels;
+using SR.Presentation.Helpers;
 using SR.ServiceClient.SCMetodoPago;
 using System.Collections.ObjectModel;
 using System.Security.Claims;
@@ -11,14 +12,14 @@ using System.Security.Claims;
 namespace SR.Presentation.Controllers
 {
     [Authorize]
+    [AuthorizeUser]
     public class MetodoPagoController : Controller
     {
         private readonly IMetodoPagoClient _metodoPagoClient;
         public MetodoPagoController(IMetodoPagoClient metodoPagoClient)
         {
             _metodoPagoClient = metodoPagoClient;
-        }
-
+        }       
         public IActionResult Index(int page = 1, int pageSize = 5, string buscar = "")
         {
             var metodoPagos = _metodoPagoClient.ObtenerListaMetodoPago(page, pageSize, buscar);
@@ -39,6 +40,7 @@ namespace SR.Presentation.Controllers
             ViewData["TotalCount"] = (metodoPagos != null && metodoPagos.Any()) ? metodoPagos.First().Total : 0;
             return PartialView("_TablaMedotoPago", new ObservableCollection<MetodoPago>(metodoPagos));
         }
+     
         public IActionResult Create()
         {
             return PartialView("_MetodoPagoForm", new MetodoPagoViewModel());
@@ -64,6 +66,7 @@ namespace SR.Presentation.Controllers
             }
             return PartialView("_MetodoPagoForm", metodoPago);
         }
+  
         [HttpGet]
         public IActionResult Edit(int id)
         {

@@ -5,14 +5,17 @@ using SR.Entities.BaseEntities.CanchaEntities;
 using SR.Entities.BaseEntities.PermisoEntities;
 using SR.Entities.BaseEntities.UsuarioEntities;
 using SR.Entities.ViewModels;
+using SR.Presentation.Helpers;
 using SR.ServiceClient.SCMenu;
 using SR.ServiceClient.SCUsuario;
 using System.Collections.ObjectModel;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace SR.Presentation.Controllers
 {
     [Authorize]
+    [AuthorizeUser]
     public class UsuarioController : Controller
     {
         private readonly IUsuarioClient _usuarioClient;
@@ -22,7 +25,7 @@ namespace SR.Presentation.Controllers
             _usuarioClient = usuarioClient;
             _menuClient = menuClient;
             
-        }
+        }  
         public IActionResult Index(int page = 1, int pageSize = 5, string buscar = "")
         {
             var usuarios = _usuarioClient.ObtenerListaUsuario(page, pageSize, buscar);
@@ -68,6 +71,13 @@ namespace SR.Presentation.Controllers
             if (_usuarioClient.ValidarUsuarioCorreo(usuario.Correo,usuario.Id))
             {
                 ModelState.AddModelError("Correo", "Ya existe una usuario con ese Correo.");
+            }
+            if (!string.IsNullOrWhiteSpace(usuario.Telefono))
+            {
+                if (!Regex.IsMatch(usuario.Telefono, @"^(9\d{8}|0\d{1,2}\d{6,7})$"))
+                {
+                    ModelState.AddModelError(nameof(usuario.Telefono), "Debe ingresar un número válido de teléfono.");
+                }
             }
             if (ModelState.IsValid)
             {
@@ -125,6 +135,13 @@ namespace SR.Presentation.Controllers
             {
                 ModelState.AddModelError("Correo", "Ya existe una usuario con ese Correo.");
             }
+            if (!string.IsNullOrWhiteSpace(usuario.Telefono))
+            {
+                if (!Regex.IsMatch(usuario.Telefono, @"^(9\d{8}|0\d{1,2}\d{6,7})$"))
+                {
+                    ModelState.AddModelError(nameof(usuario.Telefono), "Debe ingresar un número válido de teléfono.");
+                }
+            }
             if (ModelState.IsValid)
             {
                 var claims = HttpContext.User;
@@ -151,7 +168,7 @@ namespace SR.Presentation.Controllers
                 return Json(new { success = result });
             }
             usuario.menus = _menuClient.ObtenerListaMenu();
-            return PartialView("_UsuarioForm", true);
+            return PartialView("_UsuarioForm", usuario);
         }
 
         [HttpGet]
